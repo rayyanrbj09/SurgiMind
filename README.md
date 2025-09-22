@@ -1,5 +1,7 @@
 # Surgical Mind
 
+⚠️ Disclaimer
+SurgiMind is a research and educational project. It is not approved for clinical use.
 **Surgical Mind** is an AI-powered system for **surgical workflow analysis**. It integrates medical report detection, surgical tool recognition, and procedural workflow analysis to support precision, safety, and efficiency in the operating room.
 
 ## Features
