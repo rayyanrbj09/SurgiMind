@@ -1,1 +1,5 @@
 synapseclient
+pdfplumber
+docx
+Documment
+langchain
