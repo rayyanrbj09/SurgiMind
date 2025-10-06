@@ -1,0 +1,105 @@
+import { AppHeader, AppFooter, navigate } from '../main.js';
+
+export function renderPage(appContainer) {
+    appContainer.innerHTML = `
+        ${AppHeader('help')}
+        <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 max-w-7xl mx-auto">
+                <header class="text-center mb-12">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-[#1f2937] mb-2 tracking-tight">
+                        About <span class="text-primary-blue">SurgiMind</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">AI-Powered Surgical Workflow Analysis</p>
+
+                    <div class="bg-glass border border-red-400 text-red-800 p-4 rounded-lg max-w-2xl mx-auto" role="alert">
+                        <p class="font-bold">⚠️ Research Disclaimer</p>
+                        <p class="text-sm mt-1">SurgiMind is an academic research and educational project. It is **not** approved or intended for clinical use.</p>
+                    </div>
+                </header>
+
+                <section class="bg-glass p-6 md:p-10 rounded-xl mb-12 border-l-8 border-primary-blue animate-pulse-border">
+                    <h2 class="text-3xl font-bold text-[#1f2937] mb-4">Precision Intelligence in the Operating Room</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        SurgiMind is an advanced research system designed to integrate medical report detection, surgical tool recognition, and procedural workflow analysis. Our mission is to prototype the future of surgical support by delivering **real-time, actionable insights** that enhance precision, safety, and efficiency during complex operations.
+                    </p>
+                </section>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+
+                    <section class="bg-glass p-6 rounded-xl">
+                        <h2 class="text-2xl font-bold text-[#1f2937] mb-4 flex items-center border-b border-gray-200 pb-2">
+                            <span class="text-accent-green mr-2">&rsaquo;&rsaquo;</span>
+                            Impactful Use Cases
+                        
+                        </h2>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-primary-blue font-bold mr-2">&bull;</span>
+                                <p><strong>Real-Time Support:</strong> Provides instantaneous, objective feedback to the surgical team.</p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary-blue font-bold mr-2">&bull;</span>
+                                <p><strong>Training Enhancement:</strong> Offers automated, data-driven assessment for surgical residents.</p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary-blue font-bold mr-2">&bull;</span>
+                                <p><strong>Patient Safety:</strong> Workflow monitoring aids in identifying and flagging potential procedural deviations.</p>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="bg-glass p-6 rounded-xl">
+                        <h2 class="text-2xl font-bold text-[#1f2937] mb-4 flex items-center border-b border-gray-200 pb-2">
+                            <span class="text-primary-blue mr-2">&rsaquo;&rsaquo;</span>
+                            Core Technology Stack
+                        </h2>
+                        <div class="space-y-2 text-gray-700">
+                            <p class="font-semibold text-[#1f2937]">AI / ML Engines:</p>
+                            <p class="ml-4">PyTorch, YOLOv8, LSTM/GRU</p>
+                            <p class="font-semibold text-[#1f2937]">Computer Vision:</p>
+                            <p class="ml-4">OpenCV</p>
+                            <p class="font-semibold text-[#1f2937]">Backend & Frontend:</p>
+                            <p class="ml-4">Flask / FastAPI, Streamlit or React.js</p>
+                        </div>
+                    </section>
+                </div>
+                
+                <section class="mb-12 pt-8">
+                    <h2 class="text-3xl font-bold text-[#1f2937] text-center mb-8">Team & Contributors</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <div class="bg-glass p-6 rounded-xl text-center">
+                            <img src="https://placehold.co/70x70/E0F2F1/1E40AF?text=MR" class="w-16 h-16 rounded-full object-cover mx-auto mb-3">
+                            <p class="font-bold text-text-dark">MOHD RAYYAN BIN MOHD JAWEED</p>
+                            <span class="text-xs text-gray-600">B.Tech Student, JNTUH | AI/ML Enthusiast</span>
+                            <div class="flex justify-center space-x-3 mt-2">
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">L</a>
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">G</a>
+                            </div>
+                        </div>
+                        <div class="bg-glass p-6 rounded-xl text-center">
+                            <img src="https://placehold.co/70x70/E0F2F1/1E40AF?text=SA" class="w-16 h-16 rounded-full object-cover mx-auto mb-3">
+                            <p class="font-bold text-text-dark">SYED SAAD AHMED</p>
+                            <span class="text-xs text-gray-600">B.Tech Student, JNTUH | AI/ML Enthusiast</span>
+                            <div class="flex justify-center space-x-3 mt-2">
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">L</a>
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">G</a>
+                            </div>
+                        </div>
+                        <div class="bg-glass p-6 rounded-xl text-center">
+                            <img src="https://placehold.co/70x70/E0F2F1/1E40AF?text=MS" class="w-16 h-16 rounded-full object-cover mx-auto mb-3">
+                            <p class="font-bold text-text-dark">MOHAMMED SOFIYAAN</p>
+                            <span class="text-xs text-gray-600">B.Tech Student, JNTUH | AI/ML Enthusiast</span>
+                            <div class="flex justify-center space-x-3 mt-2">
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">L</a>
+                                <a href="#" target="_blank" class="text-primary-blue hover:text-accent-green transition duration-150">G</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+        </main>
+        ${AppFooter()}
+    `;
+}
