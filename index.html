@@ -4,14 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SurgiMind - Clinical AI Platform</title>
-    <!-- Load Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load AOS for scroll animations on landing page -->
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
-    
-    <!-- Custom Tailwind Configuration based on prompt tokens -->
+
     <script>
         tailwind.config = {
             theme: {
@@ -33,17 +28,29 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
 
-<link rel="stylesheet" href="style.css">
+    <script src="assets/js/main.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
 
-
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <script type="module" src="assets/js/renderers/landing.js"></script>
+    <script type="module" src="assets/js/renderers/login.js"></script>
+    <script type="module" src="assets/js/renderers/signup.js"></script>
+    <script type="module" src="assets/js/renderers/dashboard.js"></script>
+    <script type="module" src="assets/js/renderers/upload.js"></script>
+    <script type="module" src="assets/js/renderers/detection.js"></script>
+    <script type="module" src="assets/js/renderers/outcome.js"></script>
+    <script type="module" src="assets/js/renderers/history.js"></script>
+    <script type="module" src="assets/js/renderers/help.js"></script>
+    
 </head>
 
 <body class="min-h-screen bg-soft-gray-bg" onload="initApp()">
 
     <div id="app-container" class="min-h-screen">
-        <!-- Application content will be loaded here by JavaScript -->
-    </div>
+        </div>
     
     <div id="disclaimerModal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] flex items-center justify-center opacity-0 transition-opacity duration-500 pointer-events-none">
         <div id="modalContent" class="bg-surface-white p-8 max-w-lg w-11/12 rounded-xl shadow-2xl relative transform scale-90 transition-transform duration-500">
@@ -60,13 +67,10 @@
             </p>
         </div>
     </div>
+    <div id="app-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        </div>
+    <div id="toast-container" class="fixed bottom-4 right-4 z-[100] space-y-3">
+        </div>
     
-    <!-- Load AOS Script -->
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-    <!-- JavaScript State Management and Page Rendering -->
-   
-    <script src="app.js"></script>
-
 </body>
 </html>
