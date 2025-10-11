@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurgiMind - Clinical AI Platform</title>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load AOS for scroll animations on landing page -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
+    
+    <!-- Custom Tailwind Configuration based on prompt tokens -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1E40AF',
+                        'accent-green': '#059669',
+                        'text-dark': '#111827',
+                        'surface-white': '#ffffff',
+                        'soft-gray-bg': '#F7F9FB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    transitionTimingFunction: {
+                        'cubic-bezier': 'cubic-bezier(0.4, 0, 0.2, 1)',
+                    },
+                }
+            }
+        }
+    </script>
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body class="min-h-screen bg-soft-gray-bg" onload="initApp()">
+
+    <div id="app-container" class="min-h-screen">
+        <!-- Application content will be loaded here by JavaScript -->
+    </div>
+    
+    <div id="disclaimerModal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] flex items-center justify-center opacity-0 transition-opacity duration-500 pointer-events-none">
+        <div id="modalContent" class="bg-surface-white p-8 max-w-lg w-11/12 rounded-xl shadow-2xl relative transform scale-90 transition-transform duration-500">
+            <button id="closeModalButton" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition duration-150" onclick="hideDisclaimerModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <h3 class="text-2xl font-extrabold text-primary-blue mb-4 border-b pb-2">
+                ⚠️ Important Disclaimer
+            </h3>
+            <p class="text-gray-700 leading-relaxed">
+                SurgiMind is strictly a **research and educational project**. 
+                It is not approved, licensed, or intended for clinical use, diagnosis, or treatment. 
+                Always rely on professional medical advice and certified tools.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Load AOS Script -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+    <!-- JavaScript State Management and Page Rendering -->
+   
+    <script src="app.js"></script>
+
+</body>
+</html>
