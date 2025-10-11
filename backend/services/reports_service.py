@@ -1,55 +1,62 @@
 """
 -- IGNORE --
-Input formats : PDF, CSV, DOCX
+Input formats : PDF, CSV, DOCX - Contains {text, tables, images}
 Output formats : Key Findings Summary, Full Report, Presentation Slides or Charts
 Targeted Users : Doctors, Surgeons, Medical Researchers
 """
+
 import pdfplumber
-from docx import Document
-import pandas as pd
-import os
+import pytesseract
+from PIL import Image
+from pdf2image import convert_from_path
+import io
 
-class TextExtractionService:
-    def __init__(self, file_path):
-        self.file_path = file_path
-
-    def extract_pdf(self):
-        print("Extracting text from PDF...")
-        text = ""
-        with pdfplumber.open(self.file_path) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n"
-        return text
-
-    def extract_docx(self):
-        print("Extracting text from DOCX...")
-        text = ""
-        doc = Document(self.file_path)
-        for para in doc.paragraphs:
-            text += para.text + "\n"
-        return text
-
-    def extract_csv(self):
-        print("Extracting text from CSV...")
-        df = pd.read_csv(self.file_path)
-        return df.to_string(index=False)
+class ReportExtractor:
+    def __init__(self, pdf_path):
+        self.pdf_path = pdf_path
+        self.text = ""
+        self.ocr_text = ""
+        self.tables = []
 
     def extract_text(self):
-        ext = os.path.splitext(self.file_path)[1].lower()
-        if ext == ".pdf":
-            return self.extract_pdf()
-        elif ext == ".docx":
-            return self.extract_docx()
-        elif ext == ".csv":
-            return self.extract_csv()
-        else:
-            raise ValueError("Unsupported file type. Please provide PDF, DOCX, or CSV.")
+        try:
+            with pdfplumber.open(self.pdf_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        self.text += page_text + "\n"
+        except Exception as e:
+            print(f"[ERROR] Text extraction failed: {e}")
 
-if __name__ == "__main__":
-    # Example usage
-    file_path = r"C:/Users/Rayyan/Downloads/Untitled document (8) (1).pdf"  # Change to your file path
-    extractor = TextExtractionService(file_path)
-    extracted_text = extractor.extract_text()
-    print(extracted_text)
+    def extract_tables(self):
+        try:
+            with pdfplumber.open(self.pdf_path) as pdf:
+                for page in pdf.pages:
+                    page_tables = page.extract_tables()
+                    for table in page_tables:
+                        table_str = "\n".join([", ".join(row) for row in table])
+                        self.tables.append(table_str)
+        except Exception as e:
+            print(f"[ERROR] Table extraction failed: {e}")
+
+    def extract_images_text(self):
+        try:
+            images = convert_from_path(self.pdf_path, dpi=300)
+            for i, image in enumerate(images):
+                text = pytesseract.image_to_string(image)
+                if text.strip():
+                    self.ocr_text += f"\n[Page {i+1} OCR]\n{text}"
+        except Exception as e:
+            print(f"[ERROR] OCR extraction failed: {e}")
+
+    def extract_all(self):
+        self.extract_text()
+        self.extract_tables()
+        self.extract_images_text()
+
+        combined = (
+            f"--- TEXT EXTRACTED ---\n{self.text}\n"
+            f"--- OCR EXTRACTED ---\n{self.ocr_text}\n"
+            f"--- TABLES ---\n{''.join(self.tables)}"
+        )
+        return combined

@@ -7,19 +7,19 @@ It accepts a set of parameters from the user that can be used to generate a prom
 3. LLM classes provide access to the large language model (LLM) APIs and services.
 
 """
-from PIL  import Image
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain.llms import OpenAI
+from transformers import pipeline
 
-llm = OpenAI(temperature=0.7) 
+class Summarizer:
+    def __init__(self, model_name="facebook/bart-large-cnn"):
+        self.summarizer = pipeline("summarization", model=model_name)
 
-# Define a prompt template
-prompt = PromptTemplate(
-    input_variables=["text"],
-    template="Summarize the following medical report text into key findings:\n\n{text}\n\nKey Findings Summary:",
-)
-
-chain = LLMChain(llm=llm, prompt=prompt)
-summary = chain.run("Your medical report text goes here.")
-print(summary)
+    def summarize(self, text, max_length=150, min_length=30):
+        if len(text.split()) == 0:
+            return "No summary available for very short text."
+        max_chunk = 1500
+        chunks = [text[i:i + max_chunk] for i in range(0, len(text), max_chunk)]
+        summary_text  = []
+        for chunk in chunks:
+            summary = self.summarizer(chunk, max_length=max_length, min_length=min_length, do_sample=False)
+            summary_text.append(summary[0]['summary_text'])
+        return " ".join(summary_text)

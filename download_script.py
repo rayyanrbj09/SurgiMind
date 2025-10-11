@@ -2,11 +2,16 @@
 """
 Download CholecTrack20 Dataset
 author: Chinedu I. Nwoye
+Once Downloaded, push the data to your private S3 bucket for further processing.
+AWS CLi command to push data to S3 bucket:
+aws s3 cp <local_folder> s3://<your_bucket_name>/ --recursive --endpoint-url <your_endpoint_url>
 """     
 import requests
 import synapseutils
 import synapseclient
-
+from concurrent.futures import ThreadPoolExecutor
+from dotenv import load_dotenv
+import os
 
 def main():
 
@@ -26,18 +31,21 @@ def main():
         exit(1)
 
     # 3. Download dataset to your local folder
-    print("Downloading dataset...")
-    _ = synapseutils.syncFromSynapse(syn, entity=entity_id, path=local_folder)
-    print("success!")
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        print("Downloading dataset...")
+        _ = synapseutils.syncFromSynapse(syn, entity=entity_id, path=local_folder)
+        print("success!")
 
 
 if __name__ == "__main__":
 
+    load_dotenv()
+
     # Configuration (Please complete these values and run the code)
 
-    email = "rayyan.rna312@gmail.com" # Your email address in the Synapse account
-    authToken = "eyJ0eXAiOiJKV1QiLCJraWQiOiJXN05OOldMSlQ6SjVSSzpMN1RMOlQ3TDc6M1ZYNjpKRU9VOjY0NFI6VTNJWDo1S1oyOjdaQ0s6RlBUSCIsImFsZyI6IlJTMjU2In0.eyJhY2Nlc3MiOnsic2NvcGUiOlsidmlldyIsImRvd25sb2FkIiwibW9kaWZ5Il0sIm9pZGNfY2xhaW1zIjp7fX0sInRva2VuX3R5cGUiOiJQRVJTT05BTF9BQ0NFU1NfVE9LRU4iLCJpc3MiOiJodHRwczovL3JlcG8tcHJvZC5wcm9kLnNhZ2ViYXNlLm9yZy9hdXRoL3YxIiwiYXVkIjoiMCIsIm5iZiI6MTc1ODM2NjU2MywiaWF0IjoxNzU4MzY2NTYzLCJqdGkiOiIyNjE1OSIsInN1YiI6IjM1NTczMTYifQ.tg9KOGGjeznOZ5FeUXxcfcNvvNzJ4XWTwO3fukcVP0HHcTpcdQLsCIO0QjP5v3-ditHTdQW5LYrx3YMnRCMLIl6RtGMbmpHDujDinDS3X4Q2PazCjpHNeV-Y7DtbBOX7innudQjamKkRgZF-Mq57678LbrRe0U16oTvMxYXWhluzBcqhThFQgeJBdmtCmyIS_1aHuk3vfmLhXLxNgQb7AtU89CNAQCANZtzR0UmAopTye7dhF8QPjCJritcAQEafN4B3Svxu8I8juBY2C8ANaFL3eygNcI4-dNu1edHhWoREpXQF4waqE8Ra0rewqfkfwE0kjA1c1pFsnWdYyRxbeQ" # Your authToken from Synapse account
-    accesskey = " EEDJTFS.1903270" # Your dataset access key ID
-    local_folder = "D:/SurgiMind/data/raw" # Your local folder for the downloaded data
+    email = os.getenv('email')# Your email address in the Synapse account
+    authToken = os.getenv('auth_token')# Your authentication token from Synapse account
+    accesskey = os.getenv('acesskey')# Your access key to download the dataset
+    local_folder = "./data" # Local folder to save the downloaded dataset
 
     main()

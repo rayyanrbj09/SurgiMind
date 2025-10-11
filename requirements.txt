@@ -3,3 +3,6 @@ pdfplumber
 docx
 Documment
 langchain
+pytesseract
+camelot
+pdf2image
