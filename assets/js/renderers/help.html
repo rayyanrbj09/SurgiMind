@@ -1,9 +1,15 @@
-import { AppHeader, AppFooter, navigate } from '../main.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-export function renderPage(appContainer) {
-    appContainer.innerHTML = `
-        ${AppHeader('help')}
-        <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+</head>
+<body>
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div class="min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 max-w-7xl mx-auto">
                 <header class="text-center mb-12">
                     <h1 class="text-5xl md:text-7xl font-extrabold text-[#1f2937] mb-2 tracking-tight">
@@ -100,6 +106,5 @@ export function renderPage(appContainer) {
                 </section>
             </div>
         </main>
-        ${AppFooter()}
-    `;
-}
+</body>
+</html>

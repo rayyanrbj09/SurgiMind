@@ -1,9 +1,16 @@
-import { AppHeader, AppFooter, navigate } from '../main.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-export function renderPage(appContainer) {
-    appContainer.innerHTML = `
-        ${AppHeader('dashboard')}
-        <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+
+</head>
+<body>
+     <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
             <div class="mb-10 p-8 bg-surface-white rounded-xl shadow-lg border-l-4 border-primary-blue">
                 <h1 class="text-4xl font-bold text-text-dark mb-1">Welcome back, Dr. Smith</h1>
                 <p class="text-lg text-gray-600 mb-6">Start a new analysis or continue previous cases.</p>
@@ -89,6 +96,5 @@ export function renderPage(appContainer) {
                 </div>
             </div>
         </main>
-        ${AppFooter()}
-    `;
-}
+</body>
+</html>
