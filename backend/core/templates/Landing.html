@@ -8,15 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <script>
-        // Placeholder function to navigate to dedicated HTML pages
-        function navigate(page) {
-            if (page === 'login') window.location.href = 'login.html';
-            else if (page === 'signup') window.location.href = 'signup.html';
-            else console.log(`Navigating to ${page}`);
-        }
-    </script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="{{ url_for('static', filename='js/landing.js') }}" defer></script>
 </head>
 
 <body onload="initializeLanding()">
@@ -30,8 +24,8 @@
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 hero-text-shadow">AI-Powered Surgical Workflow Analysis</h2>
         <p class="text-base sm:text-lg text-gray-200 mb-8 hero-text-shadow">Powered by medical report detection, surgical tool recognition, and workflow analytics.</p>
         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-          <a href="login.html" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover">Login</a>
-          <a href="signup.html" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover">Sign Up</a>
+          <a href="{{ url_for('login') }}" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover">Login</a>
+          <a href="{{ url_for('signup') }}" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover">Sign Up</a>
         </div>
       </div>
     </section>
@@ -45,20 +39,20 @@
                         Integrated Video Analysis: Tools and Workflow
                     </h2>
                     <p class="text-base sm:text-xl text-gray-700 mb-6 leading-relaxed">
-                        Our powerful AI simultaneously tracks **surgical tools** and identifies the current **procedural phase** in real-time. The visual feedback provides immediate insights for training, quality control, and procedural refinement.
+                        Our powerful AI simultaneously tracks <strong>surgical tools</strong> and identifies the current <strong>procedural phase</strong> in real-time. The visual feedback provides immediate insights for training, quality control, and procedural refinement.
                     </p>
                     <ul class="space-y-4 text-gray-600">
                         <li class="flex items-start">
                             <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Line icon">〰️</span>
-                            <span>**Real-time Tool Recognition** with bounding boxes and labels.</span>
+                            <span><strong>Real-time Tool Recognition</strong> with bounding boxes and labels.</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Clock icon">⏱️</span>
-                            <span>**Automatic Phase Detection** displayed on an interactive timeline.</span>
+                            <span><strong>Automatic Phase Detection</strong> displayed on an interactive timeline.</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Checklist icon">📋</span>
-                            <span>Identify bottlenecks and areas for **procedural optimization**.</span>
+                            <span>Identify bottlenecks and areas for <strong>procedural optimization</strong>.</span>
                         </li>
                     </ul>
                 </div>
@@ -120,7 +114,7 @@
       <div class="max-w-4xl mx-auto px-4">
         <h2 class="text-3xl font-extrabold text-text-dark mb-4">Ready to Transform Your Workflow?</h2>
         <p class="text-lg text-gray-600 mb-8">Contact us to learn more about SurgiMind.</p>
-        <a href="signup.html" class="px-8 py-3 rounded-lg text-white bg-primary-blue font-semibold text-lg button-3d-hover">Sign Up Now</a>
+        <a href="{{ url_for('signup') }}" class="px-8 py-3 rounded-lg text-white bg-primary-blue font-semibold text-lg button-3d-hover">Sign Up Now</a>
       </div>
     </section>
     
@@ -146,6 +140,5 @@
   </footer>
 
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script src="/static/js/landing.js"></script> 
 </body>
 </html>

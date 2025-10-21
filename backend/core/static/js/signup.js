@@ -1,11 +1,23 @@
- // Add a 'loaded' class to the body when the page is ready to trigger animations
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.classList.add("loaded");
-
-    // Optional: Provide feedback for the non-functional form
+// signup.js
+document.addEventListener("DOMContentLoaded", () => {
     const signupForm = document.getElementById('signupForm');
-    signupForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Manual account creation is not yet available. Please use Google to sign in.');
-    });
-  });
+    
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const agreeCheckbox = document.getElementById('agree-terms');
+            if (!agreeCheckbox.checked) {
+                showToast('Please agree to the Terms of Service to continue.', 'error');
+                return;
+            }
+
+            showToast('Account Created! Redirecting to Dashboard...', 'success');
+            
+            // CRITICAL FIX: Redirect to dashboard.html on success
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 500);
+        });
+    }
+});

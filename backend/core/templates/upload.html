@@ -5,28 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SurgiMind - Upload Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <script src="/static/js/shared-app.js"></script>
-    <script src="/static/js/upload.js" defer></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="{{ url_for('static', filename='js/shared-app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}" defer></script>
 </head>
 
 <body class="dark-app-body" onload="initUpload()">
     <header class="sticky top-0 app-header-dark z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='landing.html'">
+            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='{{ url_for('index') }}'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
             <div class="flex items-center space-x-3 sm:space-x-6">
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
-                    <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
-                    <a href="upload.html" class="nav-link-glow active">Upload Report</a>
+                    <a href="{{ url_for('dashboard') }}" class="nav-link-glow">Dashboard</a>
+                    <a href="{{ url_for('upload') }}" class="nav-link-glow active">Upload Report</a>
                     <a href="#" class="nav-link-glow">Tool Detection</a>
                     <a href="#" class="nav-link-glow">History</a>
                     <a href="#" class="nav-link-glow">Help</a>
+                    <a href="{{ url_for('logout') }}" class="nav-link-Glow text-red-400">Logout</a>
                 </nav>
                 <div class="flex items-center space-x-3">
-                    <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith, Mercy Hospital</span>
-                    <div class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white">DS</div>
+                    {% if user %}
+                    <span class="text-sm text-gray-400 hidden md:inline">{{ user.name }}</span>
+                    
+                    {% if user.picture %}
+                        <img src="{{ user.picture }}" alt="Profile" class="h-10 w-10 rounded-full border-2 border-white">
+                    {% elif user.name %}
+                        <div class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white">
+                            {{ user.name.split(' ')|map('first')|join('')|upper }}
+                        </div>
+                    {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -34,7 +45,7 @@
 
     <main class="max-w-7xl mx-auto py-6 sm:py-10 px-4 sm:px-6 lg:px-8 flex-grow">
         <p class="text-sm text-gray-500 mb-6">
-            <a href="dashboard.html" class="hover:underline">Dashboard</a> > <span class="text-primary-red">Upload Report</span>
+            <a href="{{ url_for('dashboard') }}" class="hover:underline">Dashboard</a> > <span class="text-primary-red">Upload Report</span>
         </p>
 
         <div class="flex flex-col md:flex-row gap-8">
@@ -45,7 +56,7 @@
                     <p class="text-sm text-gray-400 mb-6">Drag & drop files here, or click to upload. Max file size: 50MB.</p>
                     
                     <input type="file" id="report-upload" class="hidden" accept=".pdf,.dcm,.jpg,.png" 
-                        onchange="startProcessing()">
+                           onchange="startProcessing()">
                     <button onclick="document.getElementById('report-upload').click()"
                             class="btn-primary-red text-white rounded-lg px-6 py-2 text-base font-semibold button-3d-hover">
                         Upload from Folder
@@ -81,7 +92,7 @@
                             </div>
                         </li>
                         <li class="flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-2">
+                            <div classs="flex items-center space-x-2">
                                 <span class="text-2xl">🧵</span>
                                 <span class="font-medium">Sutures (6-0 Prolene)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>

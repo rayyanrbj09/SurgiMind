@@ -1,242 +1,597 @@
-/* -----------------------------
-   Global Styles & Variables
-   ----------------------------- */
+/* ============================== */
+/* GLOBAL & LANDING PAGE STYLES */
+/* ============================== */
+
+/* Root variables for color consistency */
 :root {
-  --primary-blue: #3b82f6; /* Tailwind's blue-500 */
-  --accent-green: #10b981; /* Tailwind's emerald-500 */
-  --dark-bg-start: #1f2937; /* Tailwind's gray-800 */
-  --dark-bg-end: #111827;   /* Tailwind's gray-900 */
-  --soft-gray-bg: #f9fafb;
-}
+  --primary-blue: #1E40AF;
+  --light-blue: #3b82f6;
+  --accent-green: #059669;
+  --text-dark: #111827;
+  --surface-white: #ffffff;
+  --soft-gray-bg: #F7F9FB;
+  
+  /* --- NEW DARK THEME COLORS --- */
+  --app-bg-dark: #0A0A0A;
+  --primary-red: #E53E3E; /* Bright red for CTAs/accents */
+  --surface-card-dark: rgba(255, 255, 255, 0.05); /* Transparent card surface */
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --text-light: #F7FAFC; /* White/Off-white for text */
 
-html {
-  scroll-behavior: smooth;
+  /* --- SURGEON APP THEME COLORS (BLUE/WHITE) --- */
+  --app-primary-color: #0077B6; /* Strong Medical Blue */
+  --app-accent-color: #00B4D8; /* Light Sky Blue for glow/accents */
+  --surface-card-light: rgba(255, 255, 255, 0.95); /* Nearly white card surface */
+  --border-app-light: #E0E7FF;
 }
 
 body {
-  font-family: 'Inter', sans-serif; /* A clean, modern font */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--soft-gray-bg);
+  transition: background-color 0.5s ease; 
 }
 
-/* -----------------------------
-   Signup Page: Animated Background
-   ----------------------------- */
-.signup-bg {
-  background: linear-gradient(135deg, var(--dark-bg-start), var(--dark-bg-end), #4f46e5);
-  background-size: 400% 400%;
-  animation: animated-gradient 15s ease infinite;
-}
+/* Helper Classes */
+.color-primary { color: var(--primary-blue); }
+.bg-primary { background-color: var(--primary-blue); }
 
-@keyframes animated-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+/* --- CRITICAL FIXES FOR BUTTON COLORS --- */
+.text-primary-blue { color: var(--primary-blue); }
+.bg-primary-blue { background-color: var(--primary-blue); } 
+.border-primary-blue { border-color: var(--primary-blue); }
+/* ------------------------------------------ */
 
-/* -----------------------------
-   Entry Animations
-   ----------------------------- */
-.fade-in-up {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.fade-in-down {
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.loaded .fade-in-up, .loaded .fade-in-down {
-    opacity: 1;
-    transform: translateY(0);
-}
-.animation-delay-300 { transition-delay: 300ms; }
+.bg-accent-green { background-color: var(--accent-green); }
+.text-accent-green { color: var(--accent-green); }
 
-/* -----------------------------
-   Glassmorphism Card (Signup)
-   ----------------------------- */
-.glass-auth-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
+/* Landing Page Hero Styles */
+.hero-text-shadow { text-shadow: 2px 2px 6px rgba(0,0,0,0.7); }
+.hero-overlay-dark { background-color: rgba(0, 0, 0, 0.45); }
+.full-screen-hero { height: 100vh; align-items: center; }
 
-.glass-input {
-  background: rgba(0, 0, 0, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  outline: none;
-  transition: all 0.3s ease;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  width: 100%;
-}
-
-.glass-input:focus {
-  border-color: var(--accent-green);
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-}
-.glass-input::placeholder { color: rgba(255, 255, 255, 0.5); }
-
-.glass-social-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.glass-social-button:hover { background: rgba(255, 255, 255, 0.2); }
-
-/* -----------------------------
-   Profile Page: Interactive Navbar
-   ----------------------------- */
-#navbar {
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-#navbar.scrolled {
-  background-color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.surgimind-logo-dark {
-    font-weight: bold;
-    color: var(--primary-blue);
-    transition: transform 0.3s ease;
-}
-.surgimind-logo-dark:hover { transform: scale(1.05); }
-
-/* -----------------------------
-   Profile Page: General Styles
-   ----------------------------- */
-.hero-overlay-dark { background: rgba(0, 0, 0, 0.5); }
-.hero-text-shadow { text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
-
+/* Feature Cards */
 .feature-card {
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-in-out;
+  cursor: pointer;
 }
-
 .feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  transform: scale(1.03); 
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
 }
-
-/* -----------------------------
-   Scroll Animation
-   ----------------------------- */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.reveal-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* -----------------------------
-   Buttons
-   ----------------------------- */
-.login-button {
-  background-color: var(--primary-blue);
-  color: white;
-  padding: 0.5rem 1rem;
+.grid-image-container {
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
   border-radius: 0.5rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  margin-bottom: 1rem;
 }
-.login-button:hover {
-  background-color: #2563eb; /* Darker blue */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.45);
-}
-
-.contact-button {
-  background-color: white;
-  color: var(--primary-blue);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px 0 rgba(0,0,0, 0.1);
-}
-.contact-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px 0 rgba(0,0,0, 0.15);
-}
-
-/* Custom Styles from the original p12.html <style> block */
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #F7F9FB;
-}
-
-/* Custom Keyframes for Spinner */
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-.animate-spin {
-    animation: spin 1s linear infinite;
-}
-
-/* Responsive Tool Detection Layout */
-.detection-layout {
-    display: flex;
-    flex-direction: row; /* Default for desktop */
-}
-.camera-feed-area {
-    height: 100%;
-}
-.analysis-panel {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-@media (max-width: 1024px) {
-    .detection-layout { flex-direction: column; }
-    /* Give camera area a fixed height on mobile/tablet */
-    .camera-feed-area { 
-        width: 100% !important; 
-        height: 50vh; 
-    }
-    .analysis-panel { width: 100% !important; }
-}
-
-/* Custom Bounding Box (Simulation) */
-.bbox {
-    position: absolute;
-    border: 2px solid;
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    animation: bounce-in 0.3s ease-out;
-    pointer-events: auto; /* Allow clicks on BBox and label */
-}
-@keyframes bounce-in {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 0.8; }
+.grid-image-container img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 /* 3D Button Hover Effect */
 .button-3d-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .button-3d-hover:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 8px 15px rgba(30, 64, 175, 0.4);
+  transform: translateY(-2px) scale(1.03); 
+  box-shadow: 0 8px 15px rgba(30, 64, 175, 0.4); 
 }
 .button-3d-hover:active {
-    transform: translateY(0px) scale(0.98);
-    box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+}
+
+/* --- ANIMATIONS (Shared) --- */
+
+@keyframes pulse-grow {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+.processing-pulse {
+    animation: pulse-grow 2s infinite ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+/* --- MODAL / DISCLAIMER STYLES (NEW SMOOTH ANIMATION) --- */
+
+#disclaimerModal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* The inner modal card */
+#disclaimerModal > div { 
+  transform: translateY(-50px) scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Class applied when the modal is shown */
+#disclaimerModal.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#disclaimerModal.is-visible > div {
+  transform: translateY(0) scale(1);
+}
+
+#closeModalButton {
+  cursor: pointer;
+}
+
+/* --- AUTH PAGE SPECIFIC STYLES (Glassmorphism) --- */
+
+/* Auth Page Shell and Backgrounds */
+.auth-page-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3rem; 
+    padding-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+.login-bg {
+    background-image: url('https://images.unsplash.com/photo-1550831106-f8d5b6f1abe9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fHN1cmdlcnl8ZW58MHx8MHx8fDA%3D');
+}
+.signup-bg {
+    background-image: url('https://images.unsplash.com/photo-1640876777002-badf6aee5bcc?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3VyZ2VvbnN8ZW58MHx8MHx8fDA%3D');
+}
+
+/* Auth Card Layout */
+.auth-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+.glass-auth-card {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(30, 64, 175, 0.5); 
+    position: relative;
+    grid-column: 2 / 3; 
+    width: 420px; 
+    max-width: 100%;
+}
+.glass-auth-card:hover {
+    box-shadow: 0 8px 40px 0 rgba(30, 64, 175, 0.7);
+}
+
+/* Form Inputs */
+.glass-input-container {
+    position: relative;
+}
+.glass-input {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white !important;
+}
+.glass-input:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px var(--primary-blue);
+}
+
+/* Specific Light Inputs (for visibility against dark background blur) */
+.glass-input-light {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--text-dark) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding-right: 2.5rem !important; 
+}
+
+/* Lock/Visibility Icon Fix Positioning */
+.glass-input-container .password-toggle-btn {
+    position: absolute;
+    top: 3.25rem; 
+    right: 0.75rem; 
+    transform: translateY(-50%); 
+    cursor: pointer;
+    z-index: 20;
+    transition: color 0.2s;
+}
+
+/* Social Buttons */
+.glass-social-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.2s;
+}
+
+/* Auth Card Layout */
+.auth-container {
+    display: grid;
+    /* On small screens, the card will take 1 column. On larger, it's 3 columns. */
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+}
+/* ... (Glass Auth Card content remains the same) ... */
+
+/* --- AUTH INFO MODAL STYLES (Side Panel/Flyout) --- */
+.auth-info-panel {
+    grid-row: 1 / 2;
+    /* FIX 1: Set position to absolute to allow overlay on small screens */
+    position: absolute; 
+    z-index: 50; /* FIX 2: Higher z-index than the card (which is z-index: 20) */
+    
+    /* Center it on small screens (modal behavior) */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9) translateY(20px);
+    width: 90%; /* Responsive width for mobile */
+    max-width: 450px; /* Limit max width on mid-size screens */
+
+    height: auto; 
+    max-height: 80vh; 
+    
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: white; 
+    
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(30, 64, 175, 0.3);
+    
+    overflow-y: auto; 
+    
+    opacity: 0;
+    transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none; 
+}
+
+/* === CRITICAL FIX: STYLE TO MAKE PANELS VISIBLE === */
+.auth-info-panel.visible {
+    opacity: 1;
+    /* FIX 3: Reset transform to center and full scale */
+    transform: translate(-50%, -50%) scale(1) translateY(0); 
+    pointer-events: auto; 
+    z-index: 60; /* Ensure it is above the glass card */
+}
+/* ================================================= */
+
+/* Use media query to set fixed size and SIDE positioning only for large screens */
+@media (min-width: 1024px) { /* Tailwind's 'lg' breakpoint */
+    .auth-info-panel {
+        position: relative; /* Revert to relative for grid flow */
+        top: auto;
+        left: auto;
+        transform: none; /* Remove centering transform */
+        width: 100%; /* Take full grid column width */
+        max-width: none;
+        max-height: 600px;
+        height: 600px; 
+        z-index: 10; /* Lower z-index when beside the card */
+        
+        /* Positioning: move to the side of the auth card */
+        grid-column: 1 / 2; /* For privacy panel (left) */
+    }
+    .auth-container > #auth-info-modal-terms {
+        grid-column: 3 / 4; /* For terms panel (right) */
+    }
+    
+    .auth-info-panel.visible {
+        /* On large screens, just show it next to the card */
+        transform: none;
+    }
+}
+
+
+/* ===================================== */
+/* --- DASHBOARD / UPLOAD DARK THEME --- */
+/* ===================================== */
+
+.dark-app-body {
+    /* --- CRITICAL FIX FOR FOOTER --- */
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    /* --------------------------------- */
+    
+    background-color: var(--app-bg-dark);
+    /* NEW BACKGROUND IMAGE */
+    background-image: url('https://images.unsplash.com/photo-1577965908207-64052341935e?w=1200&q=80');
+    background-attachment: fixed;
+    background-size: cover;
+    color: var(--text-light);
+}
+
+.text-primary-red {
+    color: var(--primary-red);
+}
+
+.app-header-dark {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid var(--border-glass);
+}
+.glass-app-card {
+    background-color: var(--surface-card-dark);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.2); /* Red glow effect */
+}
+.btn-primary-red {
+    background-color: var(--primary-red);
+    color: white;
+    box-shadow: 0 4px 10px rgba(229, 62, 62, 0.4);
+}
+.btn-primary-red:hover {
+    background-color: #FC8181;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(229, 62, 62, 0.7);
+}
+.status-pill-red {
+    background-color: var(--primary-red);
+    color: var(--text-light);
+}
+.dark-app-body h1, .dark-app-body h2, .dark-app-body h3 {
+    color: var(--text-light);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+.list-item-red-border {
+    border-left: 2px solid var(--primary-red);
+    padding-left: 0.75rem;
+}
+
+/* --- NEW FOOTER STYLES FOR DARK THEME --- */
+.footer-dark {
+    margin-top: auto; 
+    background-color: #000000; 
+    color: #9CA3AF; 
+    padding-top: 2rem; 
+    padding-bottom: 2rem;
+}
+.footer-dark a {
+    color: var(--primary-red);
+}
+
+/* --- SHOOTING STAR NAV HOVER ANIMATION (Redefined for Dark Theme) --- */
+
+@keyframes shooting-star {
+    0% { width: 0; transform: translateX(-100%) skewX(-30deg); }
+    100% { width: 100%; transform: translateX(100%) skewX(-30deg); }
+}
+
+.nav-link-glow {
+    position: relative;
+    overflow: hidden;
+    padding: 8px 0;
+    transition: color 0.3s;
+    color: rgba(255, 255, 255, 0.8);
+}
+.nav-link-glow.active, .nav-link-glow:hover {
+    color: var(--primary-red);
+}
+
+.nav-link-glow::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-red);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.nav-link-glow:hover::before, .nav-link-glow.active::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.nav-link-glow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--text-light), transparent);
+    animation: none; 
+    opacity: 0;
+}
+
+.nav-link-glow:hover::after {
+    animation: shooting-star 0.8s ease-out;
+    opacity: 1;
+}
+
+/* ===================================== */
+/* --- DASHBOARD / UPLOAD SURGEON THEME --- */
+/* ===================================== */
+
+.app-bg-surgeon {
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    
+    background-color: #f0f8ff; 
+    background-image: url('https://images.unsplash.com/photo-1547496660-e88383a54b9d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+    background-attachment: fixed;
+    background-size: cover;
+    background-blend-mode: overlay; 
+    color: var(--text-dark); 
+}
+
+/* Theme Utility Classes (Used in Dashboard/Upload HTML) */
+.text-app-primary {
+    color: var(--app-primary-color);
+}
+.bg-app-primary {
+    background-color: var(--app-primary-color);
+}
+.border-app-primary {
+    border-color: var(--app-primary-color);
+}
+
+.app-header-light {
+    background-color: var(--surface-white);
+    border-bottom: 1px solid var(--border-app-light);
+}
+
+/* Card Style: Clean White with Blue Glow */
+.surgeon-card {
+    background-color: var(--surface-card-light);
+    border: 1px solid var(--border-app-light);
+    box-shadow: 0 4px 15px rgba(0, 119, 182, 0.2); 
+    transition: box-shadow 0.3s;
+}
+
+/* Button Styles */
+.btn-surgeon-primary {
+    background-color: var(--app-primary-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 119, 182, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-surgeon-primary:hover {
+    background-color: var(--app-accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 119, 182, 0.7);
+}
+
+/* Status/Metric Pills */
+.status-pill-blue {
+    background-color: var(--app-accent-color);
+    color: white;
+}
+.status-pill-success {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+/* Notification/List Separator */
+.list-item-border-blue {
+    border-left: 2px solid var(--app-primary-color);
+    padding-left: 0.75rem;
+}
+
+/* --- NAVBAR GLOW (SHOOTING STAR) --- */
+
+.nav-link-surgeon {
+    position: relative;
+    overflow: hidden;
+    padding: 8px 0;
+    transition: color 0.3s;
+    color: var(--text-dark);
+}
+
+.nav-link-surgeon.active, .nav-link-surgeon:hover {
+    color: var(--app-primary-color);
+}
+
+.nav-link-surgeon::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--app-primary-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.nav-link-surgeon:hover::before, .nav-link-surgeon.active::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Shooting star line effect */
+.nav-link-surgeon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--app-accent-color), transparent);
+    animation: none; 
+    opacity: 0;
+}
+
+.nav-link-surgeon:hover::after {
+    animation: shooting-star 0.8s ease-out;
+    opacity: 1;
+}
+
+/* Footer (Use dark version of background for contrast) */
+.footer-surgeon {
+    background-color: var(--text-dark);
+    color: var(--border-app-light);
+    margin-top: auto; 
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+.footer-surgeon a {
+    color: var(--app-accent-color);
+}
+
+
+/* ===================================== */
+/* --- TOAST NOTIFICATION CUSTOM STYLE --- */
+/* ===================================== */
+
+@keyframes rocket-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.custom-toast-animation {
+    position: relative;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+/* FIX: Ensure the rocket animation runs discreetly inside the small box */
+.custom-toast-animation::before {
+    content: '🚀'; 
+    position: absolute;
+    top: 50%;
+    left: 25%; /* Start position visible within the box */
+    font-size: 1.2rem;
+    line-height: 1;
+    transform: translateY(-50%) translateX(-150%);
+    animation: rocket-slide 3s linear infinite; 
+    z-index: 10;
+    opacity: 0.6; /* Make the animation subtle */
 }
