@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <!-- shared-app.js is assumed to contain the showToast() function -->
     <script src="{{ url_for('static', filename='js/shared-app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/upload.js') }}" defer></script>
 </head>
@@ -55,9 +56,12 @@
                     <p class="text-xl font-semibold text-white mb-2">Upload Patient Report (PDF/DICOM)</p>
                     <p class="text-sm text-gray-400 mb-6">Drag & drop files here, or click to upload. Max file size: 50MB.</p>
                     
-                    <input type="file" id="report-upload" class="hidden" accept=".pdf,.dcm,.jpg,.png" 
+                    <!-- This input now triggers the upload on its 'onchange' event -->
+                    <input type="file" id="report-upload" class="hidden" accept=".pdf,.dcm,.jpg,.png,.jpeg" 
                            onchange="startProcessing()">
-                    <button onclick="document.getElementById('report-upload').click()"
+                    
+                    <!-- This button triggers the hidden file input -->
+                    <button id="upload_report"
                             class="btn-primary-red text-white rounded-lg px-6 py-2 text-base font-semibold button-3d-hover">
                         Upload from Folder
                     </button>
@@ -92,7 +96,8 @@
                             </div>
                         </li>
                         <li class="flex items-center justify-between text-white">
-                            <div classs="flex items-center space-x-2">
+                            <!-- Typo 'classs' fixed to 'class' -->
+                            <div class="flex items-center space-x-2">
                                 <span class="text-2xl">🧵</span>
                                 <span class="font-medium">Sutures (6-0 Prolene)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
