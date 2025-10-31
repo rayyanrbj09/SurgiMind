@@ -78,7 +78,6 @@ function showToast(message, type = 'info') {
     let toastContainer = document.getElementById('toast-container');
     if (!toastContainer) {
         const tempContainer = document.createElement('div');
-        // The container needs to be appended and then the Toast() HTML inserted
         document.body.insertAdjacentHTML('beforeend', Toast());
         toastContainer = document.getElementById('toast-container');
     }
@@ -91,26 +90,21 @@ function showToast(message, type = 'info') {
         colorClass = 'bg-red-600 border-red-600';
         icon = '❌';
     } else {
-        // FIX: Use custom class for animated info bar and set rocket icon
         colorClass = 'bg-gray-800 border-gray-700 custom-toast-animation'; 
         icon = '🚀'; 
     }
     
     const toast = document.createElement('div');
     
-    // FIX: Compact styling and uses simple opacity transition for smooth top-right stacking
     toast.className = `p-3 rounded-lg shadow-xl text-white font-medium border-l-4 ${colorClass} max-w-xs transition-opacity duration-300 opacity-0`;
     toast.innerHTML = `${icon} <span class="ml-2">${message}</span>`;
     
-    // FIX: Insert new toast at the top of the stack (prepend)
     toastContainer.prepend(toast);
     
-    // Smooth fade-in
     setTimeout(() => {
         toast.style.opacity = '1';
     }, 10);
     
-    // Fade-out after 3 seconds
     setTimeout(() => {
         toast.style.opacity = '0';
         toast.addEventListener('transitionend', () => toast.remove());
@@ -123,6 +117,7 @@ function showAuthInfo(type) {
     const privacyPanel = document.getElementById('auth-info-modal-privacy');
     const termsPanel = document.getElementById('auth-info-modal-terms');
     
+    // On small screens, hide the other one if needed
     if (type === 'privacy' && termsPanel) {
         termsPanel.classList.remove('visible');
     } else if (type === 'terms' && privacyPanel) {
@@ -152,6 +147,65 @@ function hideAuthInfo(type, duration = 400) {
     }
 }
 
+// --- PROFILE DROPDOWN LOGIC (Used in Header) ---
+
+function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profile-dropdown-menu');
+    const button = document.getElementById('profile-dropdown-btn');
+    if (dropdown) {
+        const isHidden = dropdown.classList.toggle('hidden');
+        button.setAttribute('aria-expanded', !isHidden);
+    }
+}
+
+function hideProfileDropdown(redirectPath = null) {
+    const dropdown = document.getElementById('profile-dropdown-menu');
+    const button = document.getElementById('profile-dropdown-btn');
+    if (dropdown && !dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+    }
+    if (redirectPath) {
+        window.location.href = redirectPath;
+    }
+}
+
+
+// --- PROFILE PAGE EDIT LOGIC (Used in profile.html) ---
+
+function toggleEditProfile(isEditing) {
+    const fields = document.querySelectorAll('.profile-field');
+    const editBtn = document.getElementById('edit-profile-btn');
+    const saveBtn = document.getElementById('save-profile-btn');
+    const avatar = document.getElementById('profile-avatar');
+    
+    fields.forEach(field => {
+        field.readOnly = !isEditing;
+        if (isEditing) {
+            field.classList.add('glass-input-light', 'glass-input-edit');
+            field.classList.remove('glass-input-read');
+        } else {
+            field.classList.remove('glass-input-light', 'glass-input-edit');
+            field.classList.add('glass-input-read');
+        }
+    });
+
+    if (isEditing) {
+        editBtn.classList.add('hidden');
+        saveBtn.classList.remove('hidden');
+        // Show indicator that avatar can be changed (simulated)
+        if (avatar) avatar.classList.add('cursor-pointer', 'ring-4', 'ring-primary-red/50');
+    } else {
+        editBtn.classList.remove('hidden');
+        saveBtn.classList.add('hidden');
+        if (avatar) avatar.classList.remove('cursor-pointer', 'ring-4', 'ring-primary-red/50');
+        showToast('Profile information saved!', 'success');
+    }
+}
+
+function saveProfile() {
+    toggleEditProfile(false); // Switch back to view mode and show success toast
+}
 
 // Expose functions globally
 window.togglePasswordVisibility = togglePasswordVisibility;
@@ -159,3 +213,7 @@ window.handleSocialLogin = handleSocialLogin;
 window.showToast = showToast;
 window.showAuthInfo = showAuthInfo;
 window.hideAuthInfo = hideAuthInfo;
+window.toggleProfileDropdown = toggleProfileDropdown;
+window.hideProfileDropdown = hideProfileDropdown;
+window.toggleEditProfile = toggleEditProfile;
+window.saveProfile = saveProfile;
