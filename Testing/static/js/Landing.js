@@ -16,24 +16,7 @@ const features = [
   },
 ];
 
-function renderFeatures() {
-  const grid = document.getElementById("featureGrid");
-  if (!grid) return;
-    
-  grid.innerHTML = ''; 
-
-  features.forEach(f => {
-    const card = document.createElement("div");
-    card.className = "feature-card bg-white rounded-xl shadow-lg border border-gray-200 p-4";
-    card.setAttribute("data-aos", "fade-up");
-    card.innerHTML = `
-      <div class="grid-image-container"><img src="${f.img}" alt="${f.title}" /></div>
-      <h3 class="text-xl font-bold text-primary-blue mb-1">${f.title}</h3>
-      <p class="text-sm text-gray-700">${f.description}</p>
-    `;
-    grid.appendChild(card);
-  });
-}
+// NOTE: renderFeatures is included but not called, as content is static in HTML.
 
 /**
  * Shows the Disclaimer Modal with smooth CSS animation.
@@ -41,7 +24,8 @@ function renderFeatures() {
 function showDisclaimerModal() {
     const modal = document.getElementById('disclaimerModal');
     if (modal) {
-        modal.classList.add('is-visible');
+        // Uses the CSS class defined in style.css to trigger visibility
+        modal.classList.add('is-visible'); 
         document.body.style.overflow = 'hidden'; 
     }
 }
@@ -52,7 +36,8 @@ function showDisclaimerModal() {
 function hideDisclaimerModal() {
     const modal = document.getElementById('disclaimerModal');
     if (modal) {
-        modal.classList.remove('is-visible');
+        // Removes the CSS class to trigger smooth close animation
+        modal.classList.remove('is-visible'); 
         document.body.style.overflow = ''; 
     }
 }
@@ -63,23 +48,25 @@ function hideDisclaimerModal() {
 function initializeLanding() {
     console.log("Initializing Landing Page...");
     
-    // 1. Render Features (optional, if your HTML is dynamic)
-    // renderFeatures();
-    
-    // 2. Initialize AOS
+    // 1. Initialize AOS
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 1000, once: true });
     }
     
-    // 3. Show Modal after delay
-    setTimeout(showDisclaimerModal, 900);
+    // 2. Show Modal after delay
+    // CRITICAL FIX: Re-enabling the auto-show for the disclaimer modal
+    setTimeout(showDisclaimerModal, 900); 
     
-    // 4. Bind Modal close button
+    // 3. Bind Modal close button to the hide function
     const closeButton = document.getElementById('closeModalButton');
     if (closeButton) {
         closeButton.onclick = hideDisclaimerModal;
     }
 }
 
-// ** THE CRITICAL FIX: Expose the initialization function globally **
-window.initializeLanding = initializeLanding;
+// CRITICAL FIX: Use DOMContentLoaded to ensure initializeLanding() runs safely after DOM elements are available.
+document.addEventListener('DOMContentLoaded', initializeLanding);
+
+// Expose functions globally.
+window.showDisclaimerModal = showDisclaimerModal;
+window.hideDisclaimerModal = hideDisclaimerModal;

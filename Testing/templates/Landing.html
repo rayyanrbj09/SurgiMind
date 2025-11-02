@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
     <script>
         // Placeholder function to navigate to dedicated HTML pages
         function navigate(page) {
@@ -17,9 +17,33 @@
             else console.log(`Navigating to ${page}`);
         }
     </script>
+    <style>
+        /* CRITICAL FIX: Ensure the disclaimer modal scales down aggressively on mobile */
+        #disclaimerModal > div {
+            /* Reduced width to 85% to give more breathing room on the edges */
+            width: 85%; 
+            /* Minimized max-width for overall smaller appearance */
+            max-width: 320px; 
+            min-width: 250px; /* Ensure text remains readable */
+            padding: 1.5rem !important; /* Ensure content padding doesn't collapse */
+        }
+        /* NEW FIX: Style for the contained button group on landing page */
+        .landing-btn-group {
+            /* Max width on mobile to prevent stretching, use full width on md screens */
+            max-width: 250px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 640px) { /* sm breakpoint and above */
+            .landing-btn-group {
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 
-<body onload="initializeLanding()">
+<body>
   <main class="bg-soft-gray-bg">
     
     <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden full-screen-hero">
@@ -29,9 +53,11 @@
         <h1 class="text-4xl sm:text-6xl font-extrabold text-white mb-6 hero-text-shadow">Surgi<span class="text-primary-blue">Mind</span></h1>
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 hero-text-shadow">AI-Powered Surgical Workflow Analysis</h2>
         <p class="text-base sm:text-lg text-gray-200 mb-8 hero-text-shadow">Powered by medical report detection, surgical tool recognition, and workflow analytics.</p>
-        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-          <a href="login.html" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover">Login</a>
-          <a href="signup.html" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover">Sign Up</a>
+        
+        <!-- CRITICAL FIX: Added landing-btn-group wrapper for width control on mobile -->
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 landing-btn-group">
+          <a href="login.html" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover w-full sm:w-auto">Login</a>
+          <a href="signup.html" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover w-full sm:w-auto">Sign Up</a>
         </div>
       </div>
     </section>
@@ -125,7 +151,7 @@
     </section>
     
     <div id="disclaimerModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
-      <div class="bg-white p-8 max-w-sm md:max-w-lg w-11/12 rounded-xl shadow-2xl relative text-left">
+      <div class="bg-white p-8 w-11/12 rounded-xl shadow-2xl relative text-left">
         <button id="closeModalButton" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl" style="background:none;border:none;">&times;</button>
         <h3 class="text-2xl font-extrabold text-primary-blue mb-4 flex items-center">
           <span style="font-size:1.5em;margin-right:0.5em;">⚠️</span> Important Disclaimer
@@ -146,6 +172,6 @@
   </footer>
 
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script src="/static/js/landing.js"></script> 
+  <script src="../static/js/Landing.js" defer></script> 
 </body>
 </html>

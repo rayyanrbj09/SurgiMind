@@ -5,28 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SurgiMind - Upload Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <script src="/static/js/shared-app.js"></script>
-    <script src="/static/js/upload.js" defer></script>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <script src="../static/js/shared.js"></script>
+    <script src="../static/js/upload.js" defer></script>
 </head>
 
 <body class="dark-app-body" onload="initUpload()">
+    <!-- UPDATED NAVIGATION BAR WITH DROPDOWN AND NEW PAGES -->
     <header class="sticky top-0 app-header-dark z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='landing.html'">
+            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
             <div class="flex items-center space-x-3 sm:space-x-6">
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
                     <a href="upload.html" class="nav-link-glow active">Upload Report</a>
-                    <a href="#" class="nav-link-glow">Tool Detection</a>
-                    <a href="#" class="nav-link-glow">History</a>
-                    <a href="#" class="nav-link-glow">Help</a>
+                    <a href="tool_detection.html" class="nav-link-glow">Tool Detection</a>
+                    <a href="workflow.html" class="nav-link-glow">Workflow</a>
+                    <a href="about.html" class="nav-link-glow">About</a>
                 </nav>
-                <div class="flex items-center space-x-3">
-                    <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith, Mercy Hospital</span>
-                    <div class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white">DS</div>
+                <div class="relative flex items-center space-x-3">
+                    <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
+                    
+                    <!-- PROFILE DROPDOWN TRIGGER -->
+                    <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
+
+                    <!-- PROFILE DROPDOWN CONTENT -->
+                    <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
+                        <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
+                        <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
+                        <div class="border-t border-gray-700 my-1"></div>
+                        <a href="login.html" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,7 +52,8 @@
         <div class="flex flex-col md:flex-row gap-8">
             <div class="md:w-3/5 fade-in-up">
                 <div class="p-8 sm:p-10 border-4 border-dashed border-gray-600 rounded-xl text-center glass-app-card">
-                    <div class="text-6xl text-gray-300 mb-4">📄</div>
+                    <!-- FIX: Replaced "塘" with universal emoji -->
+                    <div class="text-6xl text-gray-300 mb-4">📤</div>
                     <p class="text-xl font-semibold text-white mb-2">Upload Patient Report (PDF/DICOM)</p>
                     <p class="text-sm text-gray-400 mb-6">Drag & drop files here, or click to upload. Max file size: 50MB.</p>
                     
@@ -61,13 +74,15 @@
                     <ul class="space-y-3 text-sm">
                         <li class="flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🦴</span>
+                                <!-- FIX: Replaced "ｦｴ" with universal emoji -->
+                                <span class="text-2xl">🔪</span>
                                 <span class="font-medium">Rib Spreader (Finochietto)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
                             </div>
                         </li>
                         <li class="flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2">
+                                <!-- FIX: Replaced "笨ゑｸ" with universal emoji -->
                                 <span class="text-2xl">✂️</span>
                                 <span class="font-medium">Coronary Scissor (Potts-Smith)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
@@ -75,13 +90,15 @@
                         </li>
                         <li class="flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2">
-                                <span class="text-2xl">📎</span>
+                                <!-- FIX: Replaced "梼" with universal emoji -->
+                                <span class="text-2xl">🖇️</span>
                                 <span class="font-medium">Vascular Clamps (Bulldog)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
                             </div>
                         </li>
                         <li class="flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2">
+                                <!-- FIX: Replaced "ｧｵ" with universal emoji -->
                                 <span class="text-2xl">🧵</span>
                                 <span class="font-medium">Sutures (6-0 Prolene)</span>
                                 <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
@@ -89,7 +106,8 @@
                         </li>
                         <li class="flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🥢</span>
+                                <!-- FIX: Replaced "･｢" with universal emoji -->
+                                <span class="text-2xl">🩺</span>
                                 <span class="font-medium">DeBakey Forceps</span>
                                 <span class="text-xs bg-gray-500 text-white px-2 py-0.5 rounded-full">Optional</span>
                             </div>
