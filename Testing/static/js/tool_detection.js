@@ -1,14 +1,17 @@
 let currentStream = null;
 let detectionsVisible = true;
-let confidenceThreshold = 70; // Default threshold
+// confidenceThreshold variable removed
+// Anomaly variables and logic removed entirely.
+
 
 function initToolDetection() {
     console.log("Tool Detection page initialized. Defaulting to live feed mode.");
+    
     // Start in 'live' mode by default when the page loads
     switchInputMode('live');
     
     // Apply initial filtering on load
-    applyDetectionFilter(confidenceThreshold);
+    applyDetectionFilter(100); 
 
     // 2. Simulate real-time log updates (Existing logic)
     const detectionLog = document.getElementById('detection-log');
@@ -25,6 +28,7 @@ function initToolDetection() {
         ];
         let logIndex = 0;
 
+        // Log Update Interval (Runs every 3 seconds)
         setInterval(() => {
             const newEntry = document.createElement('p');
             const logText = logActivities[logIndex % logActivities.length];
@@ -33,19 +37,18 @@ function initToolDetection() {
             newEntry.className = 'list-item-red-border';
             newEntry.innerHTML = `${new Date().toLocaleTimeString()} - ${logText}`;
             
-            // Add new entry to the top of the log
             detectionLog.prepend(newEntry);
 
             // Limit log entries
             if (detectionLog.children.length > 10) {
                 detectionLog.removeChild(detectionLog.lastElementChild);
             }
-        }, 3000); // Update every 3 seconds for smoother simulation
+        }, 3000); 
     }
 }
 
 // ===============================================
-// NEW FEATURE 1: Toggle Detections (ON/OFF Button)
+// EXISTING FEATURES: Toggle/Input Switch
 // ===============================================
 
 function toggleDetections() {
@@ -60,7 +63,9 @@ function toggleDetections() {
         toggleText.textContent = 'Hide Detections';
         toggleBtn.classList.remove('bg-gray-700', 'border-gray-600');
         toggleBtn.classList.add('btn-primary-red');
-        applyDetectionFilter(confidenceThreshold); // Reapply filter when shown
+        
+        // Reapply filter with high confidence to ensure visibility
+        applyDetectionFilter(100); 
     } else {
         overlay.style.visibility = 'hidden';
         overlay.style.opacity = '0';
@@ -71,40 +76,19 @@ function toggleDetections() {
     console.log(`Detections visibility set to: ${detectionsVisible}`);
 }
 
-// ===============================================
-// NEW FEATURE 2: Confidence Threshold
-// ===============================================
-
+// Simplified: Now only checks master visibility toggle
 function applyDetectionFilter(threshold) {
     const boundingBoxes = document.querySelectorAll('.bounding-box');
-    const actualThreshold = parseInt(threshold, 10);
 
     boundingBoxes.forEach(box => {
-        const confidence = parseInt(box.getAttribute('data-confidence'), 10);
-        
-        if (confidence < actualThreshold || !detectionsVisible) {
-            // Hide if confidence is below threshold OR if master toggle is off
+        // Show/Hide based only on the master toggle
+        if (!detectionsVisible) {
             box.style.display = 'none';
         } else {
-            // Show if confidence is above threshold AND master toggle is on
             box.style.display = 'block';
         }
     });
 }
-
-function updateThreshold(newValue) {
-    confidenceThreshold = parseInt(newValue, 10);
-    document.getElementById('threshold-value').textContent = `${confidenceThreshold}%`;
-    console.log(`Confidence Threshold set to: ${confidenceThreshold}%`);
-    
-    // Re-apply the filter immediately
-    applyDetectionFilter(confidenceThreshold);
-}
-
-
-// ===============================================
-// EXISTING INPUT SWITCH LOGIC
-// ===============================================
 
 function stopCamera() {
     if (currentStream) {
@@ -169,19 +153,16 @@ function handleVideoUpload(event) {
     const overlay = document.getElementById('message-overlay');
 
     if (file) {
-        // Hide overlay and live video, show uploaded video
         overlay.style.display = 'none';
         localVideo.classList.add('hidden');
         uploadedVideo.classList.remove('hidden');
 
-        // Set the uploaded video source
         const fileURL = URL.createObjectURL(file);
         uploadedVideo.src = fileURL;
         uploadedVideo.load();
         uploadedVideo.play();
         console.log(`Video uploaded: ${file.name}. Analysis started.`);
 
-        // Optional: Clean up the object URL when video is done
         uploadedVideo.onended = () => {
             URL.revokeObjectURL(fileURL);
         };
@@ -209,23 +190,20 @@ function switchInputMode(mode) {
     }
 
     if (mode === 'live') {
-        // Switch to Live Mode
         liveBtn.classList.add('input-switch-active');
         liveBtn.classList.remove('input-switch-inactive');
         uploadBtn.classList.remove('input-switch-active');
         uploadBtn.classList.add('input-switch-inactive');
 
-        startCamera(); // Attempt to connect to camera
+        startCamera();
         uploadControls.classList.add('hidden');
 
     } else if (mode === 'upload') {
-        // Switch to Upload Mode
         uploadBtn.classList.add('input-switch-active');
         uploadBtn.classList.remove('input-switch-inactive');
         liveBtn.classList.remove('input-switch-active');
         liveBtn.classList.add('input-switch-inactive');
 
-        // Show upload prompt
         overlay.style.display = 'flex';
         overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
         overlayTitle.textContent = "Select Video for Tool Detection";
@@ -238,4 +216,3 @@ window.initToolDetection = initToolDetection;
 window.switchInputMode = switchInputMode;
 window.handleVideoUpload = handleVideoUpload;
 window.toggleDetections = toggleDetections;
-window.updateThreshold = updateThreshold;

@@ -1,0 +1,59 @@
+<div id="ai-chat-window">
+    <div class="chat-header">
+        <span>SurgiMind AI Assistant</span>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+        <div class="message-bot">
+            👋 Hello! I'm SurgiMind AI. Ask me anything about your workflow, tools, or spatial data.
+        </div>
+        </div>
+    <div class="chat-input">
+        <input type="text" id="chat-input-field" placeholder="Ask a question..." />
+        <button onclick="simulateChatResponse()">Send</button>
+    </div>
+</div>
+
+<div id="ai-chatbot-btn" onclick="toggleChatbot()">
+    <span id="chat-icon">💬</span>
+</div>
+
+<script>
+    // NOTE: This script is here for structure, but its function is copied to shared.js
+    // Simple simulation function for demonstration (Copy this to shared.js)
+    function simulateChatResponse() {
+        const inputField = document.getElementById('chat-input-field');
+        const messages = document.getElementById('chat-messages');
+        const userText = inputField.value.trim();
+
+        if (userText === "") return;
+
+        // 1. Display User Message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message-bot text-right bg-primary-red/10 border-r-3 border-r-primary-red border-l-0';
+        userMsg.innerHTML = `<span class="text-white font-semibold">You:</span> ${userText}`;
+        messages.appendChild(userMsg);
+
+        // 2. Simulate Bot Response
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message-bot';
+            
+            let response = "";
+            if (userText.toLowerCase().includes('spatial')) {
+                response = "Spatial measurements are available in the dedicated **Spatial Measurement** page! Metrics include Incision Length and Suture Deviation.";
+            } else if (userText.toLowerCase().includes('compare')) {
+                response = "To compare performance, navigate to the Dashboard and use the history charts.";
+            } else {
+                response = "I can help with questions about tool detection, workflow phases, and data comparison. Try asking a specific query!";
+            }
+            
+            botMsg.innerHTML = `<span class="text-primary-red font-semibold">AI:</span> ${response}`;
+            messages.appendChild(botMsg);
+            messages.scrollTop = messages.scrollHeight; // Scroll to bottom
+        }, 800);
+
+        inputField.value = ''; // Clear input
+        messages.scrollTop = messages.scrollHeight; // Scroll to bottom
+    }
+    window.simulateChatResponse = simulateChatResponse;
+</script>
