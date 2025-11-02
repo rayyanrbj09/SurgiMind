@@ -18,6 +18,11 @@
   --border-glass: rgba(255, 255, 255, 0.1);
   --text-light: #F7FAFC; /* White/Off-white for text */
 
+  /* --- NEW TOOL DETECTION INPUT SWITCH COLORS --- */
+  --switch-bg-inactive: #333333;
+  --switch-border-inactive: #555555;
+  /* ----------------------------------------------- */
+
   /* --- SURGEON APP THEME COLORS (BLUE/WHITE) --- */
   --app-primary-color: #0077B6; /* Strong Medical Blue */
   --app-accent-color: #00B4D8; /* Light Sky Blue for glow/accents */
@@ -396,6 +401,33 @@ body {
     border-left: 2px solid var(--primary-red);
     padding-left: 0.75rem;
 }
+
+/* --- NEW STYLES FOR TOOL DETECTION INPUT SWITCH --- */
+.input-switch-active {
+    background-color: var(--primary-red);
+    color: white;
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 10px rgba(229, 62, 62, 0.5);
+}
+.input-switch-inactive {
+    background-color: var(--switch-bg-inactive);
+    color: #ccc;
+    border-color: var(--switch-border-inactive) !important;
+}
+.input-switch-inactive:hover {
+    background-color: #444;
+    color: white;
+}
+
+/* Ensure uploaded video element gets the same style as local video */
+#uploadedVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures video fills the wrapper */
+    display: block;
+}
+/* --- END TOOL DETECTION SWITCH STYLES --- */
+
 
 /* --- Profile Edit/Read State Styles --- */
 
