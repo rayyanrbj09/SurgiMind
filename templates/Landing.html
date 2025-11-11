@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SurgiMind - Clinical AI Platform</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="{{ url_for('static', filename='js/landing.js') }}" defer></script>
+</head>
+
+<body onload="initializeLanding()">
+  <main class="bg-soft-gray-bg">
+    
+    <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden full-screen-hero">
+      <img src="https://images.unsplash.com/photo-1734094546615-045bf5f7ea0e?w=1200&q=80&auto=format&fit=crop" alt="Surgical Background" class="absolute inset-0 w-full h-full object-cover" />
+      <div class="hero-overlay-dark absolute inset-0"></div>
+      <div class="relative z-10 max-w-4xl p-4" data-aos="fade-up">
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white mb-6 hero-text-shadow">Surgi<span class="text-primary-blue">Mind</span></h1>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 hero-text-shadow">AI-Powered Surgical Workflow Analysis</h2>
+        <p class="text-base sm:text-lg text-gray-200 mb-8 hero-text-shadow">Powered by medical report detection, surgical tool recognition, and workflow analytics.</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <a href="{{ url_for('login') }}" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover">Login</a>
+          <a href="{{ url_for('signup') }}" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover">Sign Up</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="video-analysis" class="py-16 md:py-24 bg-surface-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <p class="text-lg font-semibold text-accent-green uppercase mb-2">SEE IT IN ACTION</p>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-text-dark mb-6">
+                        Integrated Video Analysis: Tools and Workflow
+                    </h2>
+                    <p class="text-base sm:text-xl text-gray-700 mb-6 leading-relaxed">
+                        Our powerful AI simultaneously tracks <strong>surgical tools</strong> and identifies the current <strong>procedural phase</strong> in real-time. The visual feedback provides immediate insights for training, quality control, and procedural refinement.
+                    </p>
+                    <ul class="space-y-4 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Line icon">〰️</span>
+                            <span><strong>Real-time Tool Recognition</strong> with bounding boxes and labels.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Clock icon">⏱️</span>
+                            <span><strong>Automatic Phase Detection</strong> displayed on an interactive timeline.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary-blue mr-3 flex-shrink-0 text-xl" role="img" aria-label="Checklist icon">📋</span>
+                            <span>Identify bottlenecks and areas for <strong>procedural optimization</strong>.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="w-full" data-aos="fade-left" data-aos-duration="1500">
+                    <div class="relative pt-[56.25%] overflow-hidden max-w-full rounded-xl shadow-2xl" style="background-color: #111827;">
+                        <div class="absolute inset-0 flex items-center justify-center text-center text-white p-4">
+                            <div class="p-4 sm:p-8 border-4 border-white border-dashed rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <p class="text-lg sm:text-xl font-bold">Video Demonstration Placeholder</p>
+                                <p class="text-xs sm:text-sm mt-1 text-gray-300">Surgical Video with AI Overlays for Tool & Workflow</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Simulated analysis view showing real-time tool detection and phase annotation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <hr class="max-w-7xl mx-auto border-gray-200">
+
+    <section id="features" class="pt-16 pb-10 bg-soft-gray-bg">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-extrabold text-center mb-12">Three Pillars of Surgical Intelligence</h2>
+        <div id="featureGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <div class="feature-card bg-surface-white rounded-xl shadow-lg border border-gray-200 p-4" data-aos="fade-up">
+                 <div class="grid-image-container rounded-lg overflow-hidden shadow-md">
+                     <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74" alt="Report Detection" class="object-cover w-full h-full">
+                 </div>
+                 <div class="p-2">
+                     <h3 class="text-xl font-bold text-primary-blue mb-1">Report Detection & Summarization</h3>
+                     <p class="text-sm text-gray-700">Leverages NLP models to extract key findings and generate concise summaries.</p>
+                 </div>
+             </div>
+             <div class="feature-card bg-surface-white rounded-xl shadow-lg border border-gray-200 p-4" data-aos="fade-up">
+                 <div class="grid-image-container rounded-lg overflow-hidden shadow-md">
+                     <img src="https://images.unsplash.com/photo-1725409796886-850f46d1d0cb" alt="Tool Detection" class="object-cover w-full h-full">
+                 </div>
+                 <div class="p-2">
+                     <h3 class="text-xl font-bold text-primary-blue mb-1">Real-Time Tool Detection</h3>
+                     <p class="text-sm text-gray-700">Uses computer vision to detect surgical instruments in real time.</p>
+                 </div>
+             </div>
+             <div class="feature-card bg-surface-white rounded-xl shadow-lg border border-gray-200 p-4" data-aos="fade-up">
+                 <div class="grid-image-container rounded-lg overflow-hidden shadow-md">
+                     <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12" alt="Workflow Analysis" class="object-cover w-full h-full">
+                 </div>
+                 <div class="p-2">
+                     <h3 class="text-xl font-bold text-primary-blue mb-1">Procedural Workflow Analysis</h3>
+                     <p class="text-sm text-gray-700">Analyzes surgical sessions to identify bottlenecks and map efficiency.</p>
+                 </div>
+             </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="pt-16 pb-24 text-center">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-3xl font-extrabold text-text-dark mb-4">Ready to Transform Your Workflow?</h2>
+        <p class="text-lg text-gray-600 mb-8">Contact us to learn more about SurgiMind.</p>
+        <a href="{{ url_for('signup') }}" class="px-8 py-3 rounded-lg text-white bg-primary-blue font-semibold text-lg button-3d-hover">Sign Up Now</a>
+      </div>
+    </section>
+    
+    <div id="disclaimerModal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+      <div class="bg-white p-8 max-w-sm md:max-w-lg w-11/12 rounded-xl shadow-2xl relative text-left">
+        <button id="closeModalButton" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl" style="background:none;border:none;">&times;</button>
+        <h3 class="text-2xl font-extrabold text-primary-blue mb-4 flex items-center">
+          <span style="font-size:1.5em;margin-right:0.5em;">⚠️</span> Important Disclaimer
+        </h3>
+        <p class="text-gray-800 leading-relaxed">
+          SurgiMind is strictly a <strong>research and educational project</strong>. It is not approved, licensed, or intended for clinical use, diagnosis, or treatment. Always rely on professional medical advice and certified tools.
+        </p>
+      </div>
+    </div>
+
+  </main>
+  
+  <footer class="bg-gray-900 text-white py-6 text-center">
+    <div class="max-w-7xl mx-auto px-4 text-sm">
+      SurgiMind © 2024. A research initiative by JNTUH students.
+      <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+</body>
+</html>
