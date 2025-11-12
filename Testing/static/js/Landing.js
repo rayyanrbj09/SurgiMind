@@ -26,7 +26,8 @@ function showDisclaimerModal() {
     if (modal) {
         // Uses the CSS class defined in style.css to trigger visibility
         modal.classList.add('is-visible'); 
-        document.body.style.overflow = 'hidden'; 
+        // CRITICAL FIX: Use a class to manage overflow instead of inline style
+        document.body.classList.add('modal-open'); 
     }
 }
 
@@ -38,7 +39,8 @@ function hideDisclaimerModal() {
     if (modal) {
         // Removes the CSS class to trigger smooth close animation
         modal.classList.remove('is-visible'); 
-        document.body.style.overflow = ''; 
+        // CRITICAL FIX: Remove the body class to restore scrolling
+        document.body.classList.remove('modal-open'); 
     }
 }
 
@@ -53,9 +55,14 @@ function initializeLanding() {
         AOS.init({ duration: 1000, once: true });
     }
     
-    // 2. Show Modal after delay
-    // CRITICAL FIX: Re-enabling the auto-show for the disclaimer modal
-    setTimeout(showDisclaimerModal, 900); 
+    // 2. Conditional Modal Show after delay
+    // CRITICAL FIX: Only show modal if the device is NOT a mobile/tablet.
+    // window.isMobileOrTablet is assumed to be available from shared.js
+    if (typeof window.isMobileOrTablet === 'function' && !window.isMobileOrTablet()) {
+        setTimeout(showDisclaimerModal, 900); 
+    } else {
+        console.log("Disclaimer modal suppressed for mobile/tablet user.");
+    }
     
     // 3. Bind Modal close button to the hide function
     const closeButton = document.getElementById('closeModalButton');
