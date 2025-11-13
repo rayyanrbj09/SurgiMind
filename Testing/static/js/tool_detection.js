@@ -1,222 +1,221 @@
+/**********************************************
+ * SurgiMind – Minimal Clean Tool Detection
+ * One Button: Start Camera / Stop Camera
+ **********************************************/
+
 let currentStream = null;
 let detectionsVisible = true;
 
-// ---------------------- INIT ----------------------
+/* -------------------------
+   INITIALIZE PAGE
+-------------------------- */
 function initToolDetection() {
-    console.log("Tool Detection loaded. Waiting for user selection...");
-    switchInputMode('none'); // don't request camera on load
+    console.log("Tool Detection Loaded.");
+
+    // Initial state setup
+    switchInputMode("none");
+
     applyDetectionFilter();
 
-    // Simulated log updates
-    const detectionLog = document.getElementById("detection-log");
-    if (detectionLog) {
-        const sampleLogs = [
-            "Scissors DETECTED (98%)",
-            "Forceps DETECTED (92%)",
-            "Scalpel DETECTED (96%)",
-            "Retractor DETECTED (91%)"
-        ];
-        let index = 0;
-        setInterval(() => {
-            const p = document.createElement("p");
-            p.className = "list-item-red-border";
-            p.innerHTML = `${new Date().toLocaleTimeString()} - ${sampleLogs[index % sampleLogs.length]}`;
-            detectionLog.prepend(p);
-            if (detectionLog.children.length > 12) detectionLog.removeChild(detectionLog.lastElementChild);
-            index++;
-        }, 3000);
-    }
-
-    // Close profile dropdown on outside click
-    document.addEventListener('click', (e) => {
-        const menu = document.getElementById('profile-dropdown-menu');
-        const btn = document.getElementById('profile-dropdown-btn');
-        if (!menu || !btn) return;
-        if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
-            menu.classList.add('hidden');
-        }
-    });
-
-    // Close dropdown on Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const menu = document.getElementById('profile-dropdown-menu');
-            if (menu && !menu.classList.contains('hidden')) menu.classList.add('hidden');
-        }
-    });
+    enableDropdownCloseEvents();
 }
 
-// ---------------------- PROFILE DROPDOWN ----------------------
+/* -------------------------
+   PROFILE DROPDOWN
+-------------------------- */
 function toggleProfileDropdown() {
-    const menu = document.getElementById('profile-dropdown-menu');
-    if (!menu) return;
-    menu.classList.toggle('hidden');
+    const menu = document.getElementById("profile-dropdown-menu");
+    menu.classList.toggle("hidden");
 }
 
-// ---------------------- DETECTION TOGGLING ----------------------
+function enableDropdownCloseEvents() {
+    const menu = document.getElementById("profile-dropdown-menu");
+    const btn = document.getElementById("profile-dropdown-btn");
+
+    document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.add("hidden");
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") menu.classList.add("hidden");
+    });
+}
+
+/* -------------------------
+   SHOW/HIDE DETECTIONS
+-------------------------- */
 function toggleDetections() {
     detectionsVisible = !detectionsVisible;
-    const overlay = document.getElementById("detection-overlay");
-    const text = document.getElementById("toggleText");
-    overlay.style.visibility = detectionsVisible ? "visible" : "hidden";
-    text.textContent = detectionsVisible ? "Hide Detections" : "Show Detections";
+
+    document.getElementById("detection-overlay").style.visibility =
+        detectionsVisible ? "visible" : "hidden";
+
+    document.getElementById("toggleText").textContent =
+        detectionsVisible ? "Hide Detections" : "Show Detections";
+
     applyDetectionFilter();
 }
 
 function applyDetectionFilter() {
-    const boxes = document.querySelectorAll(".bounding-box");
-    boxes.forEach(box => box.style.display = detectionsVisible ? "block" : "none");
+    document.querySelectorAll(".bounding-box").forEach(box => {
+        box.style.display = detectionsVisible ? "block" : "none";
+    });
 }
 
-// ---------------------- CAMERA CONTROL ----------------------
-function stopCamera() {
-    if (currentStream) {
-        currentStream.getTracks().forEach(t => t.stop());
-        currentStream = null;
-        console.log("Camera stopped.");
-    }
-}
-
+/* -------------------------
+   CAMERA CONTROL (Combined Start/Stop)
+-------------------------- */
 function startCamera() {
     const video = document.getElementById("localVideo");
     const overlay = document.getElementById("message-overlay");
-    const errorMessage = document.getElementById("error-message");
-    overlay.style.display = "flex";
-    video.classList.add("hidden");
-    errorMessage.textContent = "Attempting to access local camera feed. Please allow permission.";
+    const button = document.getElementById("toggleCameraBtn");
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        errorMessage.textContent = "Your browser doesn't support camera access.";
-        return;
-    }
+    // Change button appearance to 'Stopping...' state (e.g., loading)
+    button.textContent = "Starting Camera...";
+    button.disabled = true;
+
+    overlay.style.display = "flex";
+    overlay.querySelector("#overlay-title").textContent = "Starting Camera...";
+    overlay.querySelector("#error-message").textContent = "Allow camera permission to begin detection.";
 
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
             currentStream = stream;
             video.srcObject = stream;
+
             video.onloadedmetadata = () => {
                 video.play();
-                overlay.style.display = "none";
+
                 video.classList.remove("hidden");
-                console.log("Camera started successfully.");
+                overlay.style.display = "none";
+
+                // Update button for 'Stop' state
+                button.textContent = "Stop Camera";
+                button.classList.add("active"); // Apply active/stop styling
+                button.disabled = false;
             };
         })
         .catch(err => {
-            console.error("Camera access failed:", err);
-            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-                errorMessage.innerHTML = "Permission denied: allow camera access in browser settings.";
-            } else if (err.name === "NotFoundError") {
-                errorMessage.innerHTML = "Camera not found. Check your device.";
-            } else {
-                errorMessage.innerHTML = "Camera access failed. " + (err.message || "");
-            }
+            // Revert button to 'Start' state on error
+            button.textContent = "Start Camera";
+            button.classList.remove("active");
+            button.disabled = false;
+
+            overlay.querySelector("#overlay-title").textContent = "Camera Connection Failed";
+            overlay.querySelector("#error-message").textContent = "Camera error: " + err.message + ". Check your permissions and try again.";
         });
 }
 
-function handleVideoUpload(event) {
-    const file = event.target.files[0];
-    const uploadedVideo = document.getElementById("uploadedVideo");
-    const localVideo = document.getElementById("localVideo");
-    const overlay = document.getElementById("message-overlay");
-
-    if (!file) return;
-    // stop camera if running
-    stopCamera();
-    localVideo.classList.add("hidden");
-
-    overlay.style.display = "none";
-    uploadedVideo.classList.remove("hidden");
-    uploadedVideo.src = URL.createObjectURL(file);
-    uploadedVideo.load();
-    uploadedVideo.play();
-    console.log(`Playing uploaded file: ${file.name}`);
-}
-
-// Manual stop by user button
-function stopCameraManual() {
-    stopCamera();
+function stopCamera() {
     const video = document.getElementById("localVideo");
     const overlay = document.getElementById("message-overlay");
-    const stopBtn = document.getElementById("stopCameraBtn");
-    const liveBtn = document.getElementById("liveFeedBtn");
+    const button = document.getElementById("toggleCameraBtn");
+
+    if (currentStream) {
+        currentStream.getTracks().forEach(t => t.stop());
+        currentStream = null;
+    }
 
     video.classList.add("hidden");
+
     overlay.style.display = "flex";
-    stopBtn.classList.add("hidden");
+    overlay.querySelector("#overlay-title").textContent = "Camera Stopped";
+    overlay.querySelector("#error-message").textContent = "Click **Start Camera** again to resume real-time detection.";
 
-    // reset live button active state if present
-    liveBtn.classList.remove("input-switch-active");
-    liveBtn.classList.add("input-switch-inactive");
-
-    document.getElementById("overlay-title").textContent = "Camera Stopped";
-    document.getElementById("error-message").textContent = "Click 'Connect to Live Feed' to start again.";
-    console.log("Camera manually stopped by user.");
+    // Update button for 'Start' state
+    button.textContent = "Start Camera";
+    button.classList.remove("active"); // Remove active/stop styling
 }
 
-// ---------------------- INPUT MODE SWITCH ----------------------
-function switchInputMode(mode) {
-    const liveBtn = document.getElementById("liveFeedBtn");
-    const uploadBtn = document.getElementById("uploadVideoBtn");
-    const stopBtn = document.getElementById("stopCameraBtn");
+/* Button click handler for the combined button */
+function toggleCamera() {
+    if (currentStream) stopCamera();
+    else startCamera();
+}
 
+/* -------------------------
+   SWITCH INPUT MODE
+-------------------------- */
+function switchInputMode(mode) {
     const localVideo = document.getElementById("localVideo");
     const uploadedVideo = document.getElementById("uploadedVideo");
     const overlay = document.getElementById("message-overlay");
-    const overlayTitle = document.getElementById("overlay-title");
-    const errorMessage = document.getElementById("error-message");
+    const title = document.getElementById("overlay-title");
+    const msg = document.getElementById("error-message");
     const uploadControls = document.getElementById("upload-controls");
+    const toggleCameraBtn = document.getElementById("toggleCameraBtn");
+    const uploadVideoBtn = document.getElementById("uploadVideoBtn");
 
-    // stop any running camera or playing upload
-    stopCamera();
-    if (uploadedVideo) {
-        uploadedVideo.pause();
-        try { URL.revokeObjectURL(uploadedVideo.src); } catch (e) {}
-        uploadedVideo.removeAttribute('src');
-    }
 
+    // 1. Stop current camera stream if active
+    if (currentStream) stopCamera();
     localVideo.classList.add("hidden");
     uploadedVideo.classList.add("hidden");
 
-    if (mode === "none") {
-        overlay.style.display = "flex";
-        overlayTitle.textContent = "Choose an Input Mode";
-        errorMessage.textContent = "Click a button above to begin.";
-        uploadControls.classList.add("hidden");
-        stopBtn.classList.add("hidden");
-        return;
-    }
+    // 2. Reset switch button styles
+    toggleCameraBtn.classList.remove("input-switch-inactive");
+    uploadVideoBtn.classList.remove("input-switch-inactive");
+    toggleCameraBtn.classList.remove("active"); // Ensure 'Stop' styling is off for a fresh start
 
-    if (mode === "live") {
-        liveBtn.classList.add("input-switch-active");
-        uploadBtn.classList.remove("input-switch-active");
+    // 3. Handle mode-specific state
+    overlay.style.display = "flex";
+    uploadControls.classList.add("hidden");
 
-        overlay.style.display = "flex";
-        overlayTitle.textContent = "Connecting to Camera...";
-        errorMessage.textContent = "Please allow camera permissions.";
-
-        stopBtn.classList.remove("hidden");
-        startCamera();
-        return;
-    }
 
     if (mode === "upload") {
-        uploadBtn.classList.add("input-switch-active");
-        liveBtn.classList.remove("input-switch-active");
-
-        overlay.style.display = "flex";
-        overlayTitle.textContent = "Select a Video File";
-        errorMessage.textContent = "Upload a surgical video for detection.";
+        title.textContent = "Upload Video for Detection";
+        msg.textContent = "Select a video file to analyze.";
         uploadControls.classList.remove("hidden");
+        
+        // Update button styles
+        toggleCameraBtn.classList.add("input-switch-inactive");
+        uploadVideoBtn.classList.add("active");
 
-        stopBtn.classList.add("hidden");
-        return;
+        // Set Upload button style
+        uploadVideoBtn.classList.remove("input-switch-inactive");
+        uploadVideoBtn.classList.add("btn-primary-red");
+        toggleCameraBtn.classList.remove("btn-camera-toggle");
+        toggleCameraBtn.classList.add("bg-gray-700", "text-white", "border-gray-600");
+    } else { // mode === "none" or "live"
+        title.textContent = "Choose an Input Mode";
+        msg.textContent = "Click **Start Camera** or **Upload Video** to begin.";
+
+        // Set Live Feed (Start Camera) button style
+        toggleCameraBtn.classList.add("btn-camera-toggle");
+        toggleCameraBtn.classList.remove("bg-gray-700", "text-white", "border-gray-600");
+        uploadVideoBtn.classList.add("input-switch-inactive");
+        uploadVideoBtn.classList.remove("btn-primary-red");
     }
 }
 
-// expose to window
+/* -------------------------
+   VIDEO UPLOAD (Placeholder)
+-------------------------- */
+function handleVideoUpload(event) {
+    const file = event.target.files[0];
+    const uploadedVideo = document.getElementById("uploadedVideo");
+    const overlay = document.getElementById("message-overlay");
+
+    if (file) {
+        const fileURL = URL.createObjectURL(file);
+        uploadedVideo.src = fileURL;
+
+        // Hide overlay and show video
+        overlay.style.display = "none";
+        uploadedVideo.classList.remove("hidden");
+
+        // In a real app, you would start processing the video here
+        console.log("Video uploaded and ready to play/process:", file.name);
+    }
+}
+
+
+/* ------------------------- */
 window.initToolDetection = initToolDetection;
-window.switchInputMode = switchInputMode;
-window.handleVideoUpload = handleVideoUpload;
+window.toggleCamera = toggleCamera;
 window.toggleDetections = toggleDetections;
-window.stopCameraManual = stopCameraManual;
 window.toggleProfileDropdown = toggleProfileDropdown;
+window.switchInputMode = switchInputMode; // Export switchInputMode for HTML button
+window.handleVideoUpload = handleVideoUpload; // Export handleVideoUpload for HTML input
