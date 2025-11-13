@@ -8,21 +8,21 @@
     <link rel="stylesheet" href="../static/css/style.css" />
     <script src="../static/js/shared.js"></script>
     <script src="../static/js/tool_detection.js" defer></script>
+
     <style>
-        /* Custom CSS to make the main content area flexible and fill height */
         .full-app-height {
-            min-height: calc(100vh - 64px - 80px); /* 100vh minus header and footer space */
+            min-height: calc(100vh - 64px - 80px);
         }
         .video-wrapper {
             position: relative;
             width: 100%;
-            height: 100%; /* Take full height of the parent flex/grid item */
-            min-height: 500px; /* Minimum visual height */
+            height: 100%;
+            min-height: 500px;
             background-color: #1a1a1a;
             border: 2px solid var(--primary-red);
             box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
             animation: pulse-border 4s infinite ease-in-out;
-            border-radius: 0.75rem; /* Rounded corners for glass style */
+            border-radius: 0.75rem;
             overflow: hidden;
         }
 
@@ -31,15 +31,14 @@
             50% { box-shadow: 0 0 30px rgba(229, 62, 62, 0.8); }
             100% { box-shadow: 0 0 10px rgba(229, 62, 62, 0.4); }
         }
-        
+
         #localVideo, #uploadedVideo {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video fills the wrapper */
+            object-fit: cover;
             display: block;
         }
 
-        /* Message Overlay for when camera fails or upload is needed */
         .message-overlay {
             position: absolute;
             inset: 0;
@@ -51,6 +50,7 @@
             color: white;
             text-align: center;
         }
+
         .bounding-box {
             position: absolute;
             border: 3px solid;
@@ -61,142 +61,127 @@
             padding: 2px 4px;
             text-shadow: 1px 1px 2px #000;
             background-color: rgba(0, 0, 0, 0.5);
-            transition: opacity 0.3s ease; /* Added for smoother toggle */
         }
     </style>
 </head>
 
 <body class="dark-app-body" onload="initToolDetection()">
+
+    <!-- HEADER -->
     <header class="sticky top-0 app-header-dark z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
+            <div class="text-2xl font-bold text-white tracking-wide cursor-pointer"
+                 onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
-            
-            <div class="flex items-center space-x-3 sm:space-x-6">
-                
-                <nav class="hidden md:flex space-x-6 text-base font-medium">
-                    <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
-                    <a href="upload.html" class="nav-link-glow">Upload Report</a>
-                    <a href="tool_detection.html" class="nav-link-glow active">Tool Detection</a>
-                    <a href="workflow.html" class="nav-link-glow">Workflow</a>
-                    <a href="about.html" class="nav-link-glow">About</a>
-                </nav>
-                
-                <div class="relative flex items-center space-x-3">
-                    <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
-                    <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
-                    
-                    <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
-                        
-                        <div class="md:hidden">
-                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Dashboard</a>
-                            <a href="upload.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Upload Report</a>
-                            <a href="tool_detection.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Tool Detection</a>
-                            <a href="workflow.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Workflow</a>
-                            <a href="about.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">About</a>
-                            <div class="border-t border-gray-700 my-1"></div>
-                        </div>
-                        
-                        <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
-                        <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
-                        <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
-                        <div class="border-t border-gray-700 my-1"></div>
-                        <a href="login.html" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
-                    </div>
-                </div>
-            </div>
+
+            <nav class="hidden md:flex space-x-6 text-base font-medium">
+                <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
+                <a href="upload.html" class="nav-link-glow">Upload Report</a>
+                <a href="tool_detection.html" class="nav-link-glow active">Tool Detection</a>
+                <a href="workflow.html" class="nav-link-glow">Workflow</a>
+                <a href="about.html" class="nav-link-glow">About</a>
+            </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-6 sm:py-10 px-4 sm:px-6 lg:px-8 flex-grow detection-main">
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto py-10 px-4">
+
         <h1 class="text-3xl font-bold text-white mb-6">Real-Time Surgical Tool Detection</h1>
-        
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-            <div class="flex space-x-4">
-                <button id="liveFeedBtn" class="px-6 py-2 rounded-lg font-semibold border-2 transition input-switch-active" onclick="switchInputMode('live')">
-                    Connect to Live Feed
-                </button>
-                <button id="uploadVideoBtn" class="px-6 py-2 rounded-lg font-semibold border-2 transition input-switch-inactive" onclick="switchInputMode('upload')">
-                    Upload Video
-                </button>
-            </div>
+
+        <!-- CONTROL BUTTONS -->
+        <div class="flex space-x-4 mb-6">
             
-            <button id="toggleDetectionBtn" class="px-6 py-2 rounded-lg font-semibold border-2 transition btn-primary-red" onclick="toggleDetections()">
+            <button id="liveFeedBtn"
+                class="px-6 py-2 rounded-lg font-semibold border-2 transition input-switch-inactive"
+                onclick="switchInputMode('live')">
+                Connect to Live Feed
+            </button>
+
+            <!-- NEW STOP BUTTON -->
+            <button id="stopCameraBtn"
+                class="px-6 py-2 rounded-lg font-semibold border-2 transition bg-gray-700 text-white border-gray-600 hidden"
+                onclick="stopCameraManual()">
+                Stop Camera
+            </button>
+
+            <button id="uploadVideoBtn"
+                class="px-6 py-2 rounded-lg font-semibold border-2 transition input-switch-inactive"
+                onclick="switchInputMode('upload')">
+                Upload Video
+            </button>
+
+            <button id="toggleDetectionBtn"
+                class="px-6 py-2 rounded-lg font-semibold border-2 transition btn-primary-red"
+                onclick="toggleDetections()">
                 <span id="toggleText">Hide Detections</span>
             </button>
+
         </div>
-        
+
+        <!-- GRID -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+
+            <!-- VIDEO AREA -->
             <div class="lg:col-span-2 h-full">
                 <div id="video-wrapper" class="video-wrapper">
+
                     <video id="localVideo" autoplay playsinline class="hidden"></video>
                     <video id="uploadedVideo" controls playsinline class="hidden"></video>
-                    
+
+                    <!-- OVERLAY -->
                     <div id="message-overlay" class="message-overlay">
                         <div class="p-4 rounded-lg bg-black/70 max-w-sm">
-                            <h3 id="overlay-title" class="text-xl font-bold mb-2 text-primary-red">Connecting to Camera...</h3>
+                            <h3 id="overlay-title" class="text-xl font-bold mb-2 text-primary-red">
+                                Choose an Input Mode
+                            </h3>
                             <p id="error-message" class="text-sm text-gray-400">
-                                Attempting to access local camera feed. This requires HTTPS or a local environment (localhost).
+                                Click "Connect to Live Feed" or "Upload Video" to begin.
                             </p>
+
                             <div id="upload-controls" class="mt-4 hidden">
-                                <label for="video-upload" class="btn-primary-red cursor-pointer block text-white rounded-lg px-4 py-2 text-base font-semibold transition">
+                                <label for="video-upload"
+                                    class="btn-primary-red block cursor-pointer px-4 py-2 rounded-lg">
                                     Select Video File
                                 </label>
-                                <input type="file" id="video-upload" accept="video/*" class="hidden" onchange="handleVideoUpload(event)">
+                                <input type="file" id="video-upload" accept="video/*"
+                                       class="hidden" onchange="handleVideoUpload(event)">
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- DETECTION OVERLAY -->
                     <div id="detection-overlay" class="absolute inset-0">
-                        <div class="bounding-box bg-green-700/70 border-green-400" style="top: 30%; left: 40%; width: 15%; height: 5%;" data-confidence="98" data-tool="Scissors">
+
+                        <div class="bounding-box bg-green-700/70 border-green-400"
+                             style="top: 30%; left: 40%; width: 15%; height: 5%;">
                             Scissors (98%)
                         </div>
-                        <div class="bounding-box bg-yellow-700/70 border-yellow-400" style="top: 70%; left: 20%; width: 20%; height: 10%;" data-confidence="92" data-tool="Forceps">
+
+                        <div class="bounding-box bg-yellow-700/70 border-yellow-400"
+                             style="top: 70%; left: 20%; width: 20%; height: 10%;">
                             Forceps (92%)
                         </div>
-                        <div class="bounding-box bg-gray-500/70 border-gray-400" style="top: 50%; left: 60%; width: 10%; height: 5%;" data-confidence="45" data-tool="Suture_Thread">
-                            Suture Thread (45%)
-                        </div>
-                        
-                        <div class="absolute top-4 left-4 status-pill-red px-3 py-1 rounded-full text-sm font-semibold z-10">AI ACTIVE</div>
-                        
-                        <div class="absolute bottom-4 left-4 text-white/80 text-lg z-10">Procedure: Cardiac Bypass | Phase: Incision</div>
+
                     </div>
 
                 </div>
             </div>
 
+            <!-- ACTIVITY LOG -->
             <div class="space-y-6">
                 <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red">
-                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
-                        <span>Tool Activity Log</span>
-                        <span id="log-status" class="status-pill-red text-xs px-2 py-0.5 rounded-full">Recording...</span>
-                    </h3>
-                    <div id="detection-log" class="h-64 overflow-y-auto text-sm space-y-2 text-gray-400 bg-black/20 p-3 rounded-lg">
-                        <p class="list-item-red-border">10:01:23 - Scissors **DETECTED** (Conf: 98.1%)</p>
-                        <p class="list-item-red-border">10:01:25 - Forceps **DETECTED** (Conf: 92.4%)</p>
-                        <p class="list-item-red-border">10:01:30 - Tool change: Scalpel used.</p>
-                        <p class="list-item-red-border">10:01:45 - Rib Spreader **DETECTED** (Conf: 99.9%)</p>
+                    <h3 class="text-xl font-semibold text-white mb-4">Tool Activity Log</h3>
+
+                    <div id="detection-log"
+                         class="h-64 overflow-y-auto text-sm text-gray-400 bg-black/20 p-3 rounded-lg">
                     </div>
                 </div>
-
-                <button onclick="showToast('Detection session saved.', 'success')" class="w-full btn-primary-red text-white rounded-lg px-6 py-3 text-base font-semibold button-3d-hover">
-                    End & Save Detection Session
-                </button>
-                
-                <p class="text-gray-400 text-sm">Simulated AI analysis based on video input. For demonstration purposes only.</p>
             </div>
+
         </div>
     </main>
-    
-    <footer class="footer-dark px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col justify-center items-center text-sm space-y-2">
-            <p class="text-center">SurgiMind &copy; 2024. A research initiative by JNTUH students.</p>
-            <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
-        </div>
-    </footer>
-    <script src="../static/js/shared.js" defer></script>
 
 </body>
 </html>
