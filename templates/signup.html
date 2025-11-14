@@ -5,23 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SurgiMind - Sign Up</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/signup.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/shared.js') }}" defer></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="../static/js/signup.js" defer></script>
+    <script src="../static/js/shared.js" defer></script>
 </head>
 <body class="min-h-screen">
     <div class="auth-page-shell signup-bg">
-        <div class="absolute top-4 left-4 sm:top-6 sm:left-6 text-2xl sm:text-3xl font-bold text-white cursor-pointer" style="transition: all 0.6s ease-out; z-index: 30;" onclick="window.location.href='{{ url_for('index') }}'">
+        <div class="absolute top-4 left-4 sm:top-6 sm:left-6 text-2xl sm:text-3xl font-bold text-white cursor-pointer" style="transition: all 0.6s ease-out; z-index: 30;" onclick="window.location.href='Landing.html'">
             Surgi<span class="text-primary-blue">Mind</span>
         </div>
         
-        <div class="flex flex-col justify-center w-full max-w-6xl flex-grow px-4 lg:px-0">
+        <!-- FIX: Removed flex-grow class and added py-12 to ensure proper vertical centering and prevent the panel from overlapping the footer on small screens. -->
+        <div class="flex flex-col justify-center w-full max-w-6xl px-4 lg:px-0 py-12">
             <div class="auth-container mx-auto">
+                
+                <div id="auth-info-modal-privacy" class="auth-info-panel privacy-panel lg:w-[400px] h-full" tabindex="-1" role="dialog" aria-hidden="true">
+                    <button class="absolute top-4 right-4 text-white/70 hover:text-white" onclick="hideAuthInfo('privacy')">✕</button>
+                </div>
+
                 <div class="glass-auth-card p-6 rounded-xl shadow-2xl relative fade-in-up w-full max-w-sm sm:max-w-md lg:w-[420px]" role="form" aria-labelledby="signup-title">
                     <h1 id="signup-title" class="text-xl sm:text-2xl font-bold text-center text-white mb-6">Create Your Account</h1>
 
-                    <!-- This form is for UI purposes only for now -->
-                    <form class="space-y-6" id="signupForm" onsubmit="return false;">
+                    <form class="space-y-6" id="signupForm">
                         <div>
                             <label for="name" class="block text-sm font-medium text-white">Full Name</label>
                             <input id="name" name="name" type="text" required 
@@ -53,9 +58,7 @@
                             </label>
                         </div>
 
-                        <!-- This button is disabled to prevent form submission errors -->
-                        <button type="button" 
-                                onclick="alert('Manual signup is coming soon!')"
+                        <button type="submit" 
                                 class="w-full bg-accent-green text-white py-3 rounded-lg text-lg font-semibold shadow-md 
                                        button-3d-hover focus:outline-none focus:ring-4 focus:ring-accent-green/50" 
                                 aria-label="Create Account on SurgiMind">
@@ -70,11 +73,14 @@
                         </div>
 
                         <div class="mt-4 flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0">
-                            <!-- This Google button is a fully functional link -->
-                            <a href="{{ url_for('google.login') }}" class="flex-1 p-3 rounded-lg text-white font-semibold glass-social-button transition button-3d-hover flex items-center justify-center" aria-label="Continue with Google">
+                            <button type="button" onclick="handleSocialLogin('Google')" 
+                                class="flex-1 p-3 rounded-lg text-white font-semibold glass-social-button transition button-3d-hover"
+                                aria-label="Continue with Google">
                                 <span class="text-xl mr-2 text-red-400">G</span> Google
-                            </a>
-                            <button type="button" onclick="alert('GitHub login is coming soon!')" class="flex-1 p-3 rounded-lg text-white font-semibold glass-social-button transition button-3d-hover" aria-label="Continue with GitHub">
+                            </button>
+                            <button type="button" onclick="handleSocialLogin('GitHub')" 
+                                class="flex-1 p-3 rounded-lg text-white font-semibold glass-social-button transition button-3d-hover"
+                                aria-label="Continue with GitHub">
                                 <span class="text-xl mr-2">🐙</span> GitHub
                             </button>
                         </div>
@@ -82,14 +88,21 @@
 
                     <p class="mt-6 text-center text-sm text-gray-200">
                         Already have an account? 
-                        <a href="{{ url_for('login') }}" class="font-medium text-accent-green hover:text-green-200">
+                        <a href="login.html" class="font-medium text-accent-green hover:text-green-200">
                             Login Here
                         </a>
                     </p>
                 </div>
+                <div id="auth-info-modal-terms" class="auth-info-panel terms-panel lg:w-[400px] h-full" tabindex="-1" role="dialog" aria-hidden="true">
+                    <button class="absolute top-4 right-4 text-white/70 hover:text-white" onclick="hideAuthInfo('terms')">✕</button>
+                </div>
             </div>
+            
+            <p class="mt-8 text-center text-xs text-gray-200" role="alert">
+                For authorized surgeons only. All data is encrypted at rest & in transit.
+            </p>
         </div>
-
+        
         <footer class="mt-4 text-center text-xs text-gray-200 w-full">
             <p class="text-center">
                 <a href="#" class="hover:underline text-white/80 transition" onclick="showAuthInfo('privacy')">Privacy Note</a> | 
@@ -97,6 +110,7 @@
             </p>
         </footer>
     </div>
+    <script src="../static/js/shared.js" defer></script>
+
 </body>
 </html>
-
