@@ -7,16 +7,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../static/css/style.css" />
     <script src="../static/js/shared.js"></script>
-    <script src="../static/js/dashboard.js" defer></script>
+    <script src="../static/js/dashboard.js" defer></script> 
+    <style>
+        /* Specific styles for the dashboard to override light/dark mode inconsistencies if needed */
+        .case-card {
+            transition: transform 0.3s ease;
+        }
+        .case-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+    </style>
 </head>
 
-<body class="dark-app-body" onload="initDashboard()" onclick="if(event.target.closest('#profile-dropdown-btn') === null) hideProfileDropdown()">
+<body class="dark-app-body">
     <header class="sticky top-0 app-header-dark z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
+            
             <div class="flex items-center space-x-3 sm:space-x-6">
+                
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="dashboard.html" class="nav-link-glow active">Dashboard</a>
                     <a href="upload.html" class="nav-link-glow">Upload Report</a>
@@ -24,108 +36,111 @@
                     <a href="workflow.html" class="nav-link-glow">Workflow</a>
                     <a href="about.html" class="nav-link-glow">About</a>
                 </nav>
+                
                 <div class="relative flex items-center space-x-3">
                     <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
-                    <!-- Dropdown Button and Menu -->
                     <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
+                    
                     <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
-                        <a href="#" onclick="hideProfileDropdown('profile.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
-                        <a href="#" onclick="hideProfileDropdown('history.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
-                        <a href="#" onclick="hideProfileDropdown('help.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
+                        
+                        <div class="md:hidden">
+                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Dashboard</a>
+                            <a href="upload.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Upload Report</a>
+                            <a href="tool_detection.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Tool Detection</a>
+                            <a href="workflow.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Workflow</a>
+                            <a href="about.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">About</a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                        </div>
+                        
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
+                        <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
+                        <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
                         <div class="border-t border-gray-700 my-1"></div>
-                        <a href="#" onclick="hideProfileDropdown('login.html')" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
+                        <a href="login.html" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
+    
     <main class="max-w-7xl mx-auto py-6 sm:py-10 px-4 sm:px-6 lg:px-8 flex-grow">
-        <div class="mb-8 sm:mb-10 p-4 sm:p-8 glass-app-card rounded-xl border-l-4 border-primary-red">
-            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-1">Welcome back, Dr. Smith</h1>
-            <p class="text-base sm:text-lg text-gray-400 mb-6">Start a new analysis or continue previous cases.</p>
-            
-            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <a href="upload.html" class="w-full sm:w-auto btn-primary-red text-white rounded-lg px-6 py-3 text-base sm:text-lg font-semibold button-3d-hover">
-                    Upload Patient Report
-                </a>
-                <a href="tool_detection.html" class="w-full sm:w-auto bg-gray-700 border border-gray-600 text-white rounded-lg px-6 py-3 text-base sm:text-lg font-semibold hover:bg-gray-600 transition duration-300 ease-cubic-bezier">
-                    Start Tool Detection (Live)
-                </a>
-                <span class="text-xs status-pill-red px-3 py-1 rounded-full font-medium mt-3 sm:mt-0 sm:ml-4 flex-shrink-0">
-                    Live model v2.2 — last trained: 2025-10-01
-                </span>
+        <h1 class="text-3xl font-bold text-white mb-6">Welcome back, Dr. Smith</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <button onclick="window.location.href='upload.html'" 
+        class="btn-primary-blue text-white rounded-lg px-6 py-3 text-base font-semibold button-3d-hover bg-blue-600 hover:bg-blue-700 transition">
+    Upload Patient Report
+</button>
+            <button onclick="window.location.href='tool_detection.html'" class="bg-gray-700 hover:bg-gray-600 text-white rounded-lg px-6 py-3 text-base font-semibold button-3d-hover transition">
+                Start Tool Detection (Live)
+            </button>
+            <div class="flex items-center justify-center bg-black/20 text-xs text-gray-400 p-2 rounded-lg border border-gray-700">
+                Live model v2.2 — last trained: 2025-10-01
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-4">
-                <h2 class="text-2xl font-semibold text-white">Recent Cases</h2>
+            
+            <div class="lg:col-span-2 space-y-6">
+                <h2 class="text-2xl font-bold text-white">Recent Cases</h2>
                 
-                <a href="history_case.html" class="block">
-                    <div class="glass-app-card rounded-xl p-6 shadow-md hover:shadow-xl transition cursor-pointer fade-in-up">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-xl font-bold text-primary-red">Case C-7023 (Aortic Valve Replacement)</h3>
-                                <p class="text-sm text-gray-400">Patient Alias: J. Doe | Date: 2025-09-27</p>
-                            </div>
-                            <div class="flex space-x-2 text-primary-red">
-                                <span title="Report Processed" class="text-lg">✅</span>
-                                <span title="Video Saved" class="text-lg">🎥</span>
-                            </div>
+                <div class="glass-app-card p-6 rounded-xl case-card border-t-4 border-primary-red">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-primary-red">Case C-7023 (Aortic Valve Replacement)</h3>
+                            <p class="text-sm text-gray-400 mt-1">Patient Alias: J. Doe | Date: 2025-09-27</p>
                         </div>
-                        <div class="mt-4 flex space-x-4 text-sm">
-                            <span class="text-primary-red font-medium hover:underline">View Case Details</span>
-                            <span class="text-gray-400 font-medium hover:underline">Download All</span>
-                        </div>
+                        <div class="text-2xl text-green-500">✅</div>
                     </div>
-                </a>
+                    <div class="mt-4 text-sm space-x-4">
+                        <a href="history_case.html" class="text-primary-red hover:text-red-400 font-medium">View Case Details</a>
+                        <span class="text-gray-500">|</span>
+                        <a href="#" class="text-gray-500 hover:text-gray-300">Download All</a>
+                    </div>
+                </div>
 
-                <a href="history_case.html" class="block">
-                    <div class="glass-app-card rounded-xl p-6 shadow-md hover:shadow-xl transition cursor-pointer fade-in-up animation-delay-300">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Case C-7024 (Pending Detection)</h3>
-                                <p class="text-sm text-gray-400">Patient Alias: M. King | Date: 2025-10-02</p>
-                            </div>
-                            <div class="flex space-x-2 text-primary-red">
-                                <span title="Report Processed" class="text-lg">✅</span>
-                                <span title="Video Missing" class="text-gray-500 text-lg">📹</span>
-                            </div>
+                <div class="glass-app-card p-6 rounded-xl case-card border-t-4 border-gray-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Case C-7024 (Pending Detection)</h3>
+                            <p class="text-sm text-gray-400 mt-1">Patient Alias: M. King | Date: 2025-10-02</p>
                         </div>
-                        <div class="mt-4 flex space-x-4 text-sm">
-                            <a href="upload.html" class="text-primary-red font-medium hover:underline">Continue Upload Analysis</a>
-                            <a href="tool_detection.html" class="text-gray-400 font-medium hover:underline">Start Live Detection</a>
-                        </div>
+                        <div class="text-2xl text-yellow-500">⏳</div>
                     </div>
-                </a>
+                    <div class="mt-4 text-sm space-x-4">
+                        <a href="upload.html" class="text-white hover:text-gray-300 font-medium">Continue Upload Analysis</a>
+                        <span class="text-gray-500">|</span>
+                        <a href="tool_detection.html" class="text-white hover:text-gray-300">Start Live Detection</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="space-y-8">
-                <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red fade-in-up">
+            <div class="space-y-6">
+                
+                <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red">
                     <h3 class="text-xl font-semibold text-white mb-4">Quick Metrics</h3>
-                    <ul class="space-y-3">
-                        <li class="flex justify-between items-center text-gray-400">
-                            <span class="font-medium"># Cases Today:</span>
-                            <span class="text-2xl font-bold text-primary-red">2</span>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between items-center text-gray-300">
+                            <span># Cases Today:</span>
+                            <span class="text-primary-red font-bold">2</span>
                         </li>
-                        <li class="flex justify-between items-center text-gray-400">
-                            <span class="font-medium">Avg Report Time:</span>
-                            <span class="text-xl font-bold text-primary-red">38s</span>
+                        <li class="flex justify-between items-center text-gray-300">
+                            <span>Avg Report Time:</span>
+                            <span class="text-white font-bold">38s</span>
                         </li>
-                        <li class="flex justify-between items-center text-gray-400">
-                            <span class="font-medium">Model Accuracy (Latest):</span>
-                            <span class="text-xl font-bold text-primary-red">94.8%</span>
+                        <li class="flex justify-between items-center text-gray-300">
+                            <span>Model Accuracy (Latest):</span>
+                            <span class="text-accent-green font-bold">94.8%</span>
                         </li>
                     </ul>
                 </div>
 
-                <div class="glass-app-card p-6 rounded-xl shadow-md fade-in-up animation-delay-300">
-                    <h3 class="text-xl font-semibold text-white mb-3">Latest Notifications</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li class="text-gray-400 list-item-red-border">Case C-7023 final outcome available.</li>
-                        <li class="text-gray-400 list-item-red-border">System update v2.2 deployed successfully.</li>
-                        <li class="text-gray-400 list-item-red-border">New clinical research references added.</li>
+                <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red">
+                    <h3 class="text-xl font-semibold text-white mb-4">Latest Notifications</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="list-item-red-border">Case C-7023 final outcome available.</li>
+                        <li class="list-item-red-border">System update v2.2 deployed successfully.</li>
+                        <li class="list-item-red-border">New clinical research references added.</li>
                     </ul>
                 </div>
             </div>
@@ -134,14 +149,12 @@
 
     <footer class="footer-dark px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col justify-center items-center text-sm space-y-2">
-            <p class="text-center">
-                SurgiMind &copy; 2024. A research initiative by JNTUH students.
-            </p>
-            <p class="text-center">
-                Explore the codebase on 
-                <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="hover:text-white transition">GitHub</a>.
-            </p>
+            <p class="text-center">SurgiMind &copy; 2024. A research initiative by JNTUH students.</p>
+            <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
         </div>
     </footer>
+    <script src="../static/js/shared.js" defer></script>
+
 </body>
 </html>
+

@@ -39,6 +39,19 @@
             border: 3px solid var(--app-bg-dark); /* Match body background */
             z-index: 1;
         }
+        .video-player-box {
+            background-color: #1a1a1a;
+            border: 2px solid var(--border-glass);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        #workflowVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
     </style>
 </head>
 
@@ -48,7 +61,9 @@
             <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
+            
             <div class="flex items-center space-x-3 sm:space-x-6">
+                
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
                     <a href="upload.html" class="nav-link-glow">Upload Report</a>
@@ -56,10 +71,22 @@
                     <a href="workflow.html" class="nav-link-glow active">Workflow</a>
                     <a href="about.html" class="nav-link-glow">About</a>
                 </nav>
+                
                 <div class="relative flex items-center space-x-3">
                     <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
                     <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
+                    
                     <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
+                        
+                        <div class="md:hidden">
+                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Dashboard</a>
+                            <a href="upload.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Upload Report</a>
+                            <a href="tool_detection.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Tool Detection</a>
+                            <a href="workflow.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Workflow</a>
+                            <a href="about.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">About</a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                        </div>
+                        
                         <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
                         <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
                         <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
@@ -75,42 +102,56 @@
         <h1 class="text-3xl font-bold text-white mb-6">Procedural Workflow Analysis (Case C-7023)</h1>
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 glass-app-card p-6 rounded-xl fade-in-up">
-                <h2 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-2">Cardiac Bypass Procedure Timeline</h2>
+            <div class="lg:col-span-2 space-y-8">
                 
-                <div class="workflow-timeline">
-                    <!-- Step 1 -->
-                    <div class="timeline-step">
-                        <h3 class="text-lg font-bold text-primary-red">Phase 1: Incision & Exposure</h3>
-                        <p class="text-sm text-gray-400">Duration: 4.2 min (15% faster than average)</p>
-                        <p class="text-xs text-gray-500 mt-1">Key Tools: Scalpel, Rib Spreader</p>
-                    </div>
+                <div class="glass-app-card p-4 rounded-xl video-player-box fade-in-up">
+                    <h2 class="text-xl font-semibold text-white mb-3">Analyzed Surgical Video</h2>
+                    <video id="workflowVideo" controls playsinline class="rounded-lg shadow-lg" 
+                           src="https://www.w3schools.com/html/mov_bbb.mp4" 
+                           poster="" style="max-height: 400px;">
+                        Your browser does not support the video tag. (Simulated video source)
+                    </video>
+                </div>
 
-                    <!-- Step 2 -->
-                    <div class="timeline-step">
-                        <h3 class="text-lg font-bold text-white">Phase 2: Vessel Grafting</h3>
-                        <p class="text-sm text-gray-400">Duration: 18.5 min (3% slower than average)</p>
-                        <p class="text-xs text-gray-500 mt-1">Key Tools: Coronary Scissor, Needle Holders, Sutures</p>
-                    </div>
+                <div class="glass-app-card p-6 rounded-xl fade-in-up">
+                    <h2 class="text-xl font-semibold text-white mb-4 border-b border-gray-700 pb-2">Cardiac Bypass Procedure Timeline</h2>
+                    
+                    <div class="workflow-timeline">
+                        <div class="timeline-step">
+                            <h3 class="text-lg font-bold text-primary-red">Phase 1: Incision & Exposure (Detected)</h3>
+                            <p class="text-sm text-gray-400">Duration: 4.2 min (15% faster than average)</p>
+                            <p class="text-xs text-gray-500 mt-1">Key Tools: Scalpel, Rib Spreader</p>
+                        </div>
 
-                    <!-- Step 3 -->
-                    <div class="timeline-step">
-                        <h3 class="text-lg font-bold text-white">Phase 3: Anastomosis</h3>
-                        <p class="text-sm text-gray-400">Duration: 25.1 min (Average performance)</p>
-                        <p class="text-xs text-gray-500 mt-1">Key Tools: Vascular Clamps, DeBakey Forceps</p>
-                    </div>
+                        <div class="timeline-step">
+                            <h3 class="text-lg font-bold text-white">Phase 2: Vessel Grafting (Detected)</h3>
+                            <p class="text-sm text-gray-400">Duration: 18.5 min (3% slower than average)</p>
+                            <p class="text-xs text-gray-500 mt-1">Key Tools: Coronary Scissor, Needle Holders, Sutures</p>
+                        </div>
 
-                    <!-- Step 4 -->
-                    <div class="timeline-step">
-                        <h3 class="text-lg font-bold text-white">Phase 4: Closure</h3>
-                        <p class="text-sm text-gray-400">Duration: 12.0 min (8% faster than average)</p>
-                        <p class="text-xs text-gray-500 mt-1">Key Tools: Suture, Tissue Forceps</p>
+                        <div class="timeline-step">
+                            <h3 class="text-lg font-bold text-white">Phase 3: Anastomosis (Detected)</h3>
+                            <p class="text-sm text-gray-400">Duration: 25.1 min (Average performance)</p>
+                            <p class="text-xs text-gray-500 mt-1">Key Tools: Vascular Clamps, DeBakey Forceps</p>
+                        </div>
+
+                        <div class="timeline-step">
+                            <h3 class="text-lg font-bold text-white">Phase 4: Closure (Detected)</h3>
+                            <p class="text-sm text-gray-400">Duration: 12.0 min (8% faster than average)</p>
+                            <p class="text-xs text-gray-500 mt-1">Key Tools: Suture, Tissue Forceps</p>
+                        </div>
                     </div>
                 </div>
-                
             </div>
 
             <div class="space-y-6">
+                
+                <a href="spatial_measurement.html" class="block w-full">
+                    <button class="w-full btn-primary-red text-white rounded-lg px-6 py-4 text-base font-semibold button-3d-hover flex items-center justify-center space-x-2">
+                        <span>📐 View Detailed Spatial Measurements</span>
+                    </button>
+                </a>
+
                 <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red fade-in-up">
                     <h3 class="text-xl font-semibold text-white mb-4">Summary & Bottlenecks</h3>
                     <p class="text-sm text-gray-400 mb-3">Overall time: 59.8 minutes</p>
@@ -140,7 +181,10 @@
     <footer class="footer-dark px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col justify-center items-center text-sm space-y-2">
             <p class="text-center">SurgiMind &copy; 2024. A research initiative by JNTUH students.</p>
+            <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
         </div>
     </footer>
+    <script src="../static/js/shared.js" defer></script>
+
 </body>
 </html>

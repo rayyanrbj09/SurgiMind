@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../static/css/style.css" />
     <script src="../static/js/shared.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Custom styles to force the select dropdown arrow visibility */
         .select-with-arrow {
@@ -21,6 +22,15 @@
             background-size: 1.5em; /* Adjusts arrow size */
             padding-right: 2.5rem !important; /* Makes room for the arrow */
         }
+        /* Re-including the profile-card styles here for clarity, though they should be in style.css */
+        .profile-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(229, 62, 62, 0.4);
+        }
     </style>
 </head>
 
@@ -30,7 +40,9 @@
             <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
+            
             <div class="flex items-center space-x-3 sm:space-x-6">
+                
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
                     <a href="upload.html" class="nav-link-glow">Upload Report</a>
@@ -38,15 +50,27 @@
                     <a href="workflow.html" class="nav-link-glow">Workflow</a>
                     <a href="about.html" class="nav-link-glow">About</a>
                 </nav>
+                
                 <div class="relative flex items-center space-x-3">
                     <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
                     <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
+                    
                     <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
-                        <a href="#" onclick="hideProfileDropdown('profile.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
-                        <a href="#" onclick="hideProfileDropdown('history.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
-                        <a href="#" onclick="hideProfileDropdown('help.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
+                        
+                        <div class="md:hidden">
+                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Dashboard</a>
+                            <a href="upload.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Upload Report</a>
+                            <a href="tool_detection.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Tool Detection</a>
+                            <a href="workflow.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Workflow</a>
+                            <a href="about.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">About</a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                        </div>
+                        
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
+                        <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
+                        <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
                         <div class="border-t border-gray-700 my-1"></div>
-                        <a href="#" onclick="hideProfileDropdown('login.html')" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
+                        <a href="login.html" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
                     </div>
                 </div>
             </div>
@@ -57,32 +81,26 @@
         <h1 class="text-3xl font-extrabold text-white mb-2 text-center">Help & Technical Support</h1>
         <p class="text-lg text-gray-400 mb-10 text-center">Need assistance? Fill out the form below and a team member will get back to you.</p>
 
-        <!-- Use a focused layout with controlled column sizes -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center">
             
-            <!-- Contact Form (Takes 2/3 of the width) -->
             <div class="md:col-span-2 glass-app-card p-6 sm:p-8 rounded-xl border-t-4 border-primary-red">
                 <h2 class="text-xl font-bold text-white mb-6 text-center">Contact Our Support Team</h2>
                 <form class="space-y-6 max-w-lg mx-auto">
                     
-                    <!-- Full Name -->
                     <div>
                         <label for="full-name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
                         <input id="full-name" type="text" placeholder="Dr. David Smith" 
                                class="glass-input glass-input-light w-full p-3 rounded-lg border border-gray-600 focus:border-primary-red">
                     </div>
                     
-                    <!-- Email Address -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
                         <input id="email" type="email" placeholder="dr.smith@hospital.org" 
                                class="glass-input glass-input-light w-full p-3 rounded-lg border border-gray-600 focus:border-primary-red">
                     </div>
                     
-                    <!-- Topic -->
                     <div>
                         <label for="topic" class="block text-sm font-medium text-gray-300 mb-1">Topic</label>
-                        <!-- CRITICAL FIX: Added .select-with-arrow class -->
                         <select id="topic" class="select-with-arrow glass-input glass-input-light w-full p-3 rounded-lg border border-gray-600 focus:border-primary-red">
                             <option>Bug Report</option>
                             <option>Feature Request</option>
@@ -91,7 +109,6 @@
                         </select>
                     </div>
 
-                    <!-- Message -->
                     <div>
                         <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
                         <textarea id="message" rows="5" placeholder="Please describe your issue or question in detail..."
@@ -106,14 +123,12 @@
                 </form>
             </div>
 
-            <!-- Quick Links (Takes 1/3 of the width) -->
             <div class="glass-app-card p-6 rounded-xl border-t-4 border-gray-600 self-start">
                 <h2 class="text-xl font-bold text-white mb-4">Quick Links</h2>
                 <ul class="space-y-2 text-sm text-gray-400">
                     <li><a href="#" class="text-primary-red hover:underline transition">Project Documentation</a></li>
                     <li><a href="#" class="text-primary-red hover:underline transition">Known Issues & Status</a></li>
                     <li><a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-primary-red hover:underline transition">SurgiMind GitHub Repo</a></li>
-                    <!-- Links to Auth Info Modals (Privacy/Terms) -->
                     <li><a href="#" onclick="showAuthInfo('privacy')" class="text-primary-red hover:underline transition">Security & Privacy Policy</a></li>
                     <li><a href="#" onclick="showAuthInfo('terms')" class="text-primary-red hover:underline transition">Terms of Service</a></li>
                 </ul>
@@ -124,7 +139,10 @@
     <footer class="footer-dark px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col justify-center items-center text-sm space-y-2">
             <p class="text-center">SurgiMind &copy; 2024. A research initiative by JNTUH students.</p>
+            <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
         </div>
     </footer>
+    <script src="../static/js/shared.js" defer></script>
+
 </body>
 </html>

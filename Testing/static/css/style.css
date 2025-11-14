@@ -2,12 +2,17 @@
 /* GLOBAL & LANDING PAGE STYLES */
 /* ============================== */
 
-/* Root variables for color consistency */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600&family=Orbitron:wght@500;600;700&family=Titillium+Web:wght@400;600&display=swap');
+
 :root {
+  --font-heading: 'Orbitron', sans-serif;
+  --font-subheading: 'Exo 2', sans-serif;
+  --font-body: 'Titillium Web', sans-serif;
+
   --primary-blue: #1E40AF;
   --light-blue: #3b82f6;
   --accent-green: #059669;
-  --text-dark: #111827;
+  --text-dark: #111827; /* Standard dark text color (BLACK in light mode) */
   --surface-white: #ffffff;
   --soft-gray-bg: #F7F9FB;
   
@@ -16,20 +21,76 @@
   --primary-red: #E53E3E; /* Bright red for CTAs/accents */
   --surface-card-dark: rgba(255, 255, 255, 0.05); /* Transparent card surface */
   --border-glass: rgba(255, 255, 255, 0.1);
-  --text-light: #F7FAFC; /* White/Off-white for text */
+  --text-light: #F7FAFC; /* Standard light text color (WHITE in dark mode) */
+
+  /* --- NEW TOOL DETECTION INPUT SWITCH COLORS --- */
+  --switch-bg-inactive: #333333;
+  --switch-border-inactive: #555555;
+  /* ----------------------------------------------- */
 
   /* --- SURGEON APP THEME COLORS (BLUE/WHITE) --- */
   --app-primary-color: #0077B6; /* Strong Medical Blue */
   --app-accent-color: #00B4D8; /* Light Sky Blue for glow/accents */
   --surface-card-light: rgba(255, 255, 255, 0.95); /* Nearly white card surface */
   --border-app-light: #E0E7FF;
+
+  /* --- NEW LIGHT THEME COLORS --- */
+  --light-app-bg: #FFFFFF;
+  --light-primary-blue: #0077B6; /* Strong Medical Blue */
+  --light-accent-blue: #00B4D8; /* Sky Blue for glow/accents */
+  --light-surface-card: rgba(0, 119, 182, 0.05); /* Very light blue background */
+  --light-border-glass: rgba(0, 0, 0, 0.1);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--soft-gray-bg);
-  transition: background-color 0.5s ease; 
+/* ================================== */
+/* ✅ ROBOTIC & FUTURISTIC TEXT LAYOUT */
+/* ================================== */
+
+/* Global Body/Standard Text: Titillium Web */
+body, p, span, li, a, label {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: inherit;
 }
+
+/* Primary Headings (H1, H2, Hero Title): Orbitron */
+h1, h2, .hero-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px; 
+}
+
+/* Secondary Headings (H3, H4, Section Title): Exo 2 */
+h3, h4, .section-title {
+  font-family: var(--font-subheading);
+  font-weight: 600; 
+  letter-spacing: 0.8px;
+}
+
+/* Buttons, Nav Links, and Command Inputs: Exo 2 */
+button, 
+.btn-primary-red, 
+.nav-link-glow, 
+.chat-header {
+  font-family: var(--font-subheading);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* Inputs, Textareas, and Dropdowns: Titillium Web */
+input, textarea, select, .glass-input {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+/* Overriding default body font which was Inter */
+body {
+  background-color: var(--soft-gray-bg);
+  /* CRITICAL FIX: Ensure body transitions colors smoothly */
+  transition: background-color 0.4s ease, color 0.4s ease; 
+}
+
 
 /* Helper Classes */
 .color-primary { color: var(--primary-blue); }
@@ -113,9 +174,11 @@ body {
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
+  
+  /* CRITICAL: Use Flexbox for guaranteed centering on all screens */
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Vertically center */
+  justify-content: center; /* Horizontally center */
 
   opacity: 0;
   pointer-events: none;
@@ -124,6 +187,16 @@ body {
 
 /* The inner modal card */
 #disclaimerModal > div { 
+  position: relative;
+  
+  /* Sizing for Mobile First (Default) */
+  width: 90%; 
+  max-width: 400px;
+  margin: auto; /* Fallback centering */
+  padding: 1.5rem;
+  border-radius: 1rem; /* Use a consistent border radius */
+
+  /* Animation */
   transform: translateY(-50px) scale(0.95);
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -135,12 +208,33 @@ body {
 }
 
 #disclaimerModal.is-visible > div {
+  /* When visible, reset transform for smooth entry */
   transform: translateY(0) scale(1);
 }
 
 #closeModalButton {
   cursor: pointer;
 }
+
+/* ------------------------------------------------ */
+/* Additional Responsiveness for Tablets/Landscape */
+/* ------------------------------------------------ */
+
+@media (min-width: 768px) {
+  #disclaimerModal > div {
+    /* Allow a slightly larger card on tablets */
+    max-width: 480px;
+  }
+}
+
+/* ------------------------------------------------ */
+/* Utility Class for Body Scroll Lock (must be added via JS) */
+/* ------------------------------------------------ */
+
+.modal-open {
+  overflow: hidden !important;
+}
+
 
 /* --- AUTH PAGE SPECIFIC STYLES (Glassmorphism) --- */
 
@@ -330,7 +424,7 @@ body {
     background-image: url('https://images.unsplash.com/photo-1577965908207-64052341935e?w=1200&q=80');
     background-attachment: fixed;
     background-size: cover;
-    color: var(--text-light);
+    color: var(--text-light); /* Base text color is white in dark mode */
 }
 
 .text-primary-red {
@@ -343,6 +437,9 @@ body {
     border-bottom: 1px solid var(--border-glass);
 }
 .glass-app-card {
+    /* CRITICAL FIX: Added smooth transition for theme change */
+    transition: background-color 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+    
     background-color: var(--surface-card-dark);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-glass);
@@ -364,6 +461,9 @@ body {
 #profile-dropdown-menu:not(.hidden) {
     opacity: 1;
     pointer-events: auto;
+}
+.dark-app-body #profile-dropdown-menu a {
+    color: var(--text-light); /* Dropdown text is white in dark mode */
 }
 #profile-dropdown-menu a {
     transition: background-color 0.2s, color 0.2s;
@@ -392,10 +492,42 @@ body {
     color: var(--text-light);
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
+.dark-app-body {
+    /* BASE TEXT COLOR for Dark Mode */
+    color: var(--text-light) !important;
+}
 .list-item-red-border {
     border-left: 2px solid var(--primary-red);
+    color: var(--text-light); /* List item text is white in dark mode */
     padding-left: 0.75rem;
 }
+
+/* --- NEW STYLES FOR TOOL DETECTION INPUT SWITCH --- */
+.input-switch-active {
+    background-color: var(--primary-red);
+    color: white;
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 10px rgba(229, 62, 62, 0.5);
+}
+.input-switch-inactive {
+    background-color: var(--switch-bg-inactive);
+    color: #ccc;
+    border-color: var(--switch-border-inactive) !important;
+}
+.input-switch-inactive:hover {
+    background-color: #444;
+    color: white;
+}
+
+/* Ensure uploaded video element gets the same style as local video */
+#uploadedVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures video fills the wrapper */
+    display: block;
+}
+/* --- END TOOL DETECTION SWITCH STYLES --- */
+
 
 /* --- Profile Edit/Read State Styles --- */
 
@@ -530,4 +662,429 @@ body {
     transform: translateY(-50%) translateX(-150%);
     z-index: 10;
     opacity: 0.6; /* Make the animation subtle */
+}
+
+/* --- ANOMALY WARNING ENHANCEMENTS --- */
+.text-shadow-md {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* ===================================== */
+/* --- AI CHATBOT ASSISTANT STYLES --- */
+/* ===================================== */
+
+/* Floating Chat Button */
+#ai-chatbot-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-red);
+    color: white;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100; /* Ensure it floats above everything */
+}
+#ai-chatbot-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(229, 62, 62, 0.9);
+}
+
+/* Chat Window Container */
+#ai-chat-window {
+    position: fixed;
+    bottom: 100px; /* Above the button */
+    right: 30px;
+    width: 350px;
+    height: 450px;
+    border-radius: 1rem;
+    overflow: hidden;
+    
+    /* Glass App Card Styling */
+    background-color: rgba(0, 0, 0, 0.9); /* Darker, less transparent background */
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--primary-red);
+    box-shadow: 0 4px 25px rgba(229, 62, 62, 0.5);
+
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+}
+
+#ai-chat-window.open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Chat Header */
+.chat-header {
+    padding: 1rem;
+    background-color: var(--primary-red);
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Chat Messages Area */
+.chat-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.message-bot {
+    background-color: rgba(229, 62, 62, 0.15); /* Light red background */
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--primary-red);
+}
+.message-bot.text-right {
+    border-left: none; /* Override left border for user message */
+}
+
+/* Chat Input Area */
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid var(--primary-red);
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+}
+.chat-input input {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem 0 0 0.5rem;
+    padding: 0.5rem 1rem;
+    color: white;
+}
+.chat-input input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+.chat-input button {
+    background-color: var(--primary-red);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.chat-input button:hover {
+    background-color: #FC8181;
+}
+
+/* ===================================== */
+/* --- LIGHT MODE / BLUE THEME STYLES --- */
+/* ===================================== */
+
+/* Base Light Mode Class */
+.light-app-body {
+    background-color: var(--light-app-bg) !important;
+    background-image: none !important; /* Remove dark background image */
+    color: var(--text-dark) !important; /* Base text color MUST be dark */
+}
+/* Ensure ALL main text content is dark */
+.light-app-body h1, 
+.light-app-body h2, 
+.light-app-body h3 {
+    color: var(--text-dark) !important;
+    text-shadow: none !important;
+}
+/* Ensure any elements relying on the dark mode base text color also flip */
+.light-app-body .text-white {
+    color: var(--text-dark) !important;
+}
+.light-app-body .text-gray-400 {
+    color: var(--text-dark) !important;
+}
+
+/* Header in Light Mode */
+.light-app-body .app-header-dark {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid var(--light-border-glass) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.light-app-body .text-primary-red {
+    color: var(--light-primary-blue) !important;
+}
+
+/* Glass Card Reversal */
+.light-app-body .glass-app-card {
+    /* CRITICAL FIX: Added smooth transition for theme change */
+    transition: background-color 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+    
+    background-color: var(--light-surface-card) !important;
+    backdrop-filter: blur(5px) !important;
+    border: 1px solid rgba(0, 119, 182, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(0, 119, 182, 0.2) !important; /* Blue glow effect */
+}
+
+/* Primary Button/CTA Reversal */
+.light-app-body .btn-primary-red {
+    background-color: var(--light-primary-blue) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0, 119, 182, 0.4) !important;
+}
+.light-app-body .btn-primary-red:hover {
+    background-color: var(--light-accent-blue) !important;
+    box-shadow: 0 6px 15px rgba(0, 119, 182, 0.7) !important;
+}
+
+/* Status Pills & List Items */
+.light-app-body .status-pill-red {
+    background-color: var(--light-primary-blue) !important;
+    color: white !important;
+}
+.light-app-body .list-item-red-border {
+    border-left: 2px solid var(--light-primary-blue) !important;
+    color: var(--text-dark) !important;
+    /* Also fix the text inside the list item that was inherited from generic white */
+}
+
+/* Nav Link Glow Reversal */
+.light-app-body .nav-link-glow {
+    color: var(--text-dark) !important;
+}
+.light-app-body .nav-link-glow.active, .light-app-body .nav-link-glow:hover {
+    color: var(--light-primary-blue) !important;
+}
+.light-app-body .nav-link-glow::before {
+    background: var(--light-primary-blue) !important;
+}
+
+/* Dropdown/Profile Button */
+.light-app-body #profile-dropdown-btn {
+    background-color: var(--light-primary-blue) !important;
+    border-color: var(--light-primary-blue) !important;
+}
+.light-app-body #profile-dropdown-menu {
+    background-color: var(--light-app-bg) !important;
+    border: 1px solid var(--light-primary-blue) !important;
+    box-shadow: 0 10px 20px rgba(0, 119, 182, 0.5) !important;
+}
+.light-app-body #profile-dropdown-menu a {
+    color: var(--text-dark) !important;
+}
+.light-app-body #profile-dropdown-menu a:hover, .light-app-body #profile-dropdown-menu a:focus {
+    background-color: var(--light-primary-blue) !important;
+    color: white !important;
+}
+
+/* Video Wrapper Border */
+.light-app-body .video-wrapper {
+    border: 2px solid var(--light-primary-blue) !important;
+    box-shadow: 0 0 20px rgba(0, 119, 182, 0.5) !important;
+}
+@keyframes pulse-border-light {
+    0% { box-shadow: 0 0 10px rgba(0, 119, 182, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(0, 119, 182, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(0, 119, 182, 0.4); }
+}
+.light-app-body .video-wrapper {
+    animation-name: pulse-border-light;
+}
+
+ /* ============================== */
+/* SURGIMIND GLOBAL GLOWING GLOVE CURSOR */
+/* ============================== */
+
+html, body {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #3b82f6 0%, #1e40af 90%);
+  box-shadow:
+    0 0 6px rgba(59, 130, 246, 0.7),
+    0 0 12px rgba(59, 130, 246, 0.6),
+    0 0 20px rgba(30, 64, 175, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s linear, background 0.2s;
+}
+
+.custom-cursor::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1.5px solid rgba(59, 130, 246, 0.5);
+  border-radius: 50%;
+  animation: cursorPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes cursorPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 0.3; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+body:active .custom-cursor {
+  transform: scale(0.85) translate(-50%, -50%);
+  background: radial-gradient(circle at 30% 30%, #60a5fa 0%, #1e3a8a 90%);
+}
+
+.tap-glow {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,183,255,0.5) 0%, rgba(0,183,255,0) 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: tapFade 0.5s ease-out forwards;
+}
+
+@keyframes tapFade {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+}
+
+
+/* ============================== */
+/* FIX: Prevent native hand icon flicker on buttons/links */
+/* ============================== */
+button, 
+a, 
+[role="button"], 
+input[type="submit"], 
+input[type="button"] {
+  cursor: none !important; /* hides the native hand */
+}
+
+/* ============================== */
+/* MOBILE FIX: Hide custom cursor on touch devices */
+/* ============================== */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor {
+    display: none !important; /* Hide glowing glove cursor on mobile */
+  }
+
+  body, button, a, input, textarea {
+    cursor: auto !important; /* Allow normal mobile touch behavior */
+  }
+}
+
+/* ============================== */
+/* SURGIMIND - PRIVACY NOTE RESPONSIVE FIX */
+/* ============================== */
+
+/* The container wrapping both login card & privacy note */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: nowrap; /* default: side-by-side */
+}
+
+/* Large screen behavior (unchanged) */
+@media (min-width: 1025px) {
+  .auth-info-panel {
+    position: relative;
+    max-width: 380px;
+    height: auto;
+    align-self: center;
+  }
+}
+
+/* --- Tablets: stack gracefully with spacing --- */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .auth-container {
+    flex-wrap: wrap; /* allow stacking */
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .auth-info-panel {
+    width: 80%;
+    max-width: 500px;
+    order: 1; /* ensure privacy note appears above login */
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .glass-auth-card {
+    width: 80%;
+    max-width: 500px;
+    order: 2; /* login below privacy */
+    margin: 0 auto;
+  }
+}
+
+/* --- Mobile: full-width stacked --- */
+@media (max-width: 767px) {
+  .auth-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .auth-info-panel,
+  .glass-auth-card {
+    width: 90%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  /* optional: reduce glass blur for readability */
+  .auth-info-panel {
+    backdrop-filter: blur(10px);
+    padding: 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================== */
+/* SURGIMIND TEAM PROFILE MODAL */
+/* ============================== */
+
+#profile-modal {
+  transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+#profile-modal-content {
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 30px rgba(229, 62, 62, 0.5);
+}
+
+#profile-modal-content:hover {
+  box-shadow: 0 0 40px rgba(229, 62, 62, 0.7);
+}
+
+#close-profile-modal {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#close-profile-modal:hover {
+  transform: rotate(90deg);
+  color: var(--primary-red);
 }

@@ -21,13 +21,29 @@
     </style>
 </head>
 
+<!-- Profile Modal -->
+<div id="profile-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 z-[200]">
+  <div id="profile-modal-content" class="glass-app-card relative p-6 rounded-xl border border-white/20 w-[90%] max-w-md text-center transform scale-90 transition-transform duration-300">
+    <button id="close-profile-modal" class="absolute top-4 right-4 text-white text-2xl hover:text-primary-red transition">✖</button>
+    <img id="modal-profile-img" src="" alt="Profile" class="h-32 w-32 rounded-full mx-auto mb-4 border-2 border-white object-cover">
+    <h3 id="modal-profile-name" class="text-2xl font-bold text-white"></h3>
+    <p id="modal-profile-college" class="text-gray-300 text-sm mt-2"></p>
+    <p id="modal-profile-roll" class="text-gray-400 text-sm mb-4"></p>
+    <p id="modal-profile-desc" class="text-gray-300 text-sm leading-relaxed mb-4"></p>
+    <div id="modal-profile-links" class="flex justify-center space-x-5 text-2xl"></div>
+  </div>
+</div>
+
+
 <body class="dark-app-body" onclick="if(event.target.closest('#profile-dropdown-btn') === null) hideProfileDropdown()">
     <header class="sticky top-0 app-header-dark z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
             <div class="text-2xl font-bold text-white tracking-wide cursor-pointer" onclick="window.location.href='Landing.html'">
                 Surgi<span class="text-primary-red">Mind</span>
             </div>
+            
             <div class="flex items-center space-x-3 sm:space-x-6">
+                
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="dashboard.html" class="nav-link-glow">Dashboard</a>
                     <a href="upload.html" class="nav-link-glow">Upload Report</a>
@@ -35,92 +51,129 @@
                     <a href="workflow.html" class="nav-link-glow">Workflow</a>
                     <a href="about.html" class="nav-link-glow active">About</a>
                 </nav>
+                
                 <div class="relative flex items-center space-x-3">
                     <span class="text-sm text-gray-400 hidden md:inline">Dr. Smith</span>
                     <div id="profile-dropdown-btn" class="h-10 w-10 rounded-full bg-primary-red flex items-center justify-center text-white font-bold cursor-pointer border-2 border-white relative z-50" onclick="toggleProfileDropdown()">DS</div>
+                    
                     <div id="profile-dropdown-menu" class="absolute right-0 top-12 mt-2 w-48 rounded-lg shadow-xl py-1 glass-app-card transition-opacity duration-200 z-[60] hidden">
-                        <a href="#" onclick="hideProfileDropdown('profile.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
-                        <a href="#" onclick="hideProfileDropdown('history.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
-                        <a href="#" onclick="hideProfileDropdown('help.html')" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
+                        
+                        <div class="md:hidden">
+                            <a href="dashboard.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Dashboard</a>
+                            <a href="upload.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Upload Report</a>
+                            <a href="tool_detection.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Tool Detection</a>
+                            <a href="workflow.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Workflow</a>
+                            <a href="about.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">About</a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                        </div>
+                        
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Profile</a>
+                        <a href="history.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">History</a>
+                        <a href="help.html" class="block px-4 py-2 text-sm text-white hover:bg-white/10 transition">Help</a>
                         <div class="border-t border-gray-700 my-1"></div>
-                        <a href="#" onclick="hideProfileDropdown('login.html')" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
+                        <a href="login.html" class="block px-4 py-2 text-sm text-red-400 hover:bg-red-400/10 transition">Logout</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 flex-grow">
-        <div class="glass-app-card p-8 rounded-xl border-t-4 border-primary-red">
-            <h1 class="text-3xl font-extrabold text-white mb-4">About SurgiMind</h1>
-            <p class="text-lg text-gray-400 mb-8">SurgiMind is a B.Tech Final Year Project developed by students of Shadan College of Engineering and Technology (JNTUH). It serves as an AI-powered prototype for simulating and analyzing surgical workflows, tool detection, and clinical report summarization.</p>
+<main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 flex-grow">
+  <div class="glass-app-card p-8 rounded-xl border-t-4 border-primary-red">
+    <h1 class="text-3xl font-extrabold text-white mb-4">About SurgiMind</h1>
+    <p class="text-lg text-gray-400 mb-8">
+      SurgiMind is a B.Tech Final Year Project developed by students of Shadan College of Engineering and Technology (JNTUH). 
+      It serves as an AI-powered prototype for simulating and analyzing surgical workflows, tool detection, and clinical report summarization.
+    </p>
 
-            <h2 class="text-2xl font-bold text-primary-red mb-6">The Development Team</h2>
+    <h2 class="text-2xl font-bold text-primary-red mb-6">The Development Team</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up">
-                    <div class="h-24 w-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 border-2 border-white">MS</div>
-                    <h3 class="text-xl font-bold text-white">Mohammed Sofiyaan</h3>
-                    <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
-                    <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05B9</p>
-                    <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
-                        <p class="list-item-red-border">**Contributed:** Front-end UI/UX, Core Template Structure, Responsiveness, and Design System implementation.</p>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="https://linkedin.com/in/sofiyaan" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://github.com/sofiyaan" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up animation-delay-300">
-                    <div class="h-24 w-24 rounded-full bg-green-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 border-2 border-white">SA</div>
-                    <h3 class="text-xl font-bold text-white">Syed Saad Ahmed</h3>
-                    <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
-                    <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05G6</p>
-                    <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
-                        <p class="list-item-red-border">**Contributed:** Backend simulation logic, Authentication flow handling (login/signup JS), and Database Structure planning.</p>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="https://linkedin.com/in/saadahmed" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://github.com/saadahmed" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up animation-delay-500">
-                    <div class="h-24 w-24 rounded-full bg-primary-red flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 border-2 border-white">MR</div>
-                    <h3 class="text-xl font-bold text-white">Mohd Rayyan Bin Mohd Jaweed</h3>
-                    <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
-                    <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05B3</p>
-                    <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
-                        <p class="list-item-red-border">**Contributed:** Core AI simulation features (Tool Detection logic, Workflow visualization planning), and Project documentation.</p>
-                    </div>
-                    <div class="flex justify-center space-x-4">
-                        <a href="https://linkedin.com/in/mohdrayyan" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Sofiyaan -->
+      <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up">
+        <div class="h-24 w-24 rounded-full mx-auto mb-4 border-2 border-white overflow-hidden">
+          <img src="../static/uploads/sofiyaan.png" alt="Sofiyaan's Profile Picture" class="h-full w-full object-cover">
         </div>
-    </main>
+        <h3 class="text-xl font-bold text-white">Mohammed Sofiyaan</h3>
+        <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
+        <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05B9</p>
+        <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
+          <p class="list-item-red-border"><b>**Contributed:**</b> Front-end UI/UX, Core Template Structure, Responsiveness, and Design System implementation.</p>
+        </div>
+        <div class="flex justify-center space-x-4">
+          <a href="https://linkedin.com/in/sofiyaan" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="https://github.com/Sofiyaan12" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://leetcode.com/u/mohammedsofiyaan12/" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LeetCode">
+            <i class="fa-solid fa-code"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Saad -->
+      <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up animation-delay-300">
+        <div class="h-24 w-24 rounded-full mx-auto mb-4 border-2 border-white overflow-hidden">
+          <img src="../static/uploads/saad.png" alt="Saad's Profile Picture" class="h-full w-full object-cover">
+        </div>
+        <h3 class="text-xl font-bold text-white">Syed Saad Ahmed</h3>
+        <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
+        <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05G6</p>
+        <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
+          <p class="list-item-red-border"><b>**Contributed:**</b> Backend simulation logic, Authentication flow handling (login/signup JS), and Database Structure planning.</p>
+        </div>
+        <div class="flex justify-center space-x-4">
+          <a href="https://www.linkedin.com/in/syed-saad-ahmed-a01a21273/" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="https://github.com/syedsaad9218" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://leetcode.com/u/syedsaad9218/" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LeetCode">
+            <i class="fa-solid fa-code"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Rayyan -->
+      <div class="profile-card text-center glass-app-card p-6 rounded-lg border border-gray-700 fade-in-up animation-delay-500">
+        <div class="h-24 w-24 rounded-full mx-auto mb-4 border-2 border-white overflow-hidden bg-primary-red">
+          <img src="../static/uploads/rayyan.png" alt="Rayyan's Profile Picture" class="h-full w-full object-cover">
+        </div>
+        <h3 class="text-xl font-bold text-white">Mohd Rayyan Bin Mohd Jaweed</h3>
+        <p class="text-sm text-gray-400">Shadan College of Engineering and Technology (JNTUH)</p>
+        <p class="text-sm text-gray-400 mb-4">Roll No: 22081A05B3</p>
+        <div class="text-sm text-gray-300 space-y-2 text-left mx-auto max-w-[200px] mb-4">
+          <p class="list-item-red-border"><b>**Contributed:**</b> Core AI simulation features (Tool Detection logic, Workflow visualization planning), and Project documentation.</p>
+        </div>
+        <div class="flex justify-center space-x-4">
+          <a href="https://www.linkedin.com/in/mohd-rayyan-bin-mohd-jaweed/" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="https://github.com/rayyanrbj09" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://leetcode.com/u/7k3rphUTZg/" target="_blank" class="text-gray-400 hover:text-primary-red transition text-2xl" title="LeetCode">
+            <i class="fa-solid fa-code"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
 
     <footer class="footer-dark px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col justify-center items-center text-sm space-y-2">
             <p class="text-center">SurgiMind &copy; 2024. A research initiative by JNTUH students.</p>
+            <p class="mt-2">Explore the codebase on <a href="https://github.com/rayyanrbj09/SurgiMind.git" target="_blank" class="text-blue-400 hover:text-blue-200 transition">GitHub</a>.</p>
         </div>
     </footer>
+    <script src="../static/js/shared.js" defer></script>
+
 </body>
 </html>
