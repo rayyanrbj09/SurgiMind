@@ -1,3 +1,20 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "surgiminddb01.c72o0msmiyyb.ap-south-1.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "database": "surgimind_db",
+            "username": "admin",
+            "name": "surgimind",
+            "askForPassword": true
+        }
+    ]
 }
