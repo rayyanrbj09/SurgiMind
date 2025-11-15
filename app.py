@@ -1,47 +1,39 @@
 import os
-from flask import Flask, redirect, url_for, render_template, session, request, jsonify
+from flask import Flask, redirect, url_for, render_template, jsonify, session, request
 from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
 from functools import wraps
+# UPDATED import to match the new function name
 from backend.core.file_uploads import save_report_file
 
-# -------------------------
-# App Setup
-# -------------------------
+# --- App Setup ---
 load_dotenv()
-app = Flask(__name__)
+app = Flask(__name__,
+            template_folder="Testing/templates",
+            static_folder="Testing/static")
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "supersecretkey")
 
-# -------------------------
-# Google OAuth Blueprint
-# -------------------------
+# --- Google OAuth Setup ---
 google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-    scope=[
-        "openid",
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/userinfo.profile"
-    ],
-    redirect_url="/login_success",        # After Google redirects back
+    redirect_to="google_auth_callback",
+    scope=["openid", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
 )
+# This is the correct way to add the parameter.
 google_bp.authorization_url_params["prompt"] = "select_account"
 app.register_blueprint(google_bp, url_prefix="/login")
 
-# -------------------------
-# Login Required Decorator
-# -------------------------
+# --- Route Protection Decorator ---
 def login_required(f):
     @wraps(f)
-    def decorated(*args, **kwargs):
+    def decorated_function(*args, **kwargs):
         if "user" not in session:
             return redirect(url_for("login"))
         return f(*args, **kwargs)
-    return decorated
+    return decorated_function
 
-# -------------------------
-# Public Routes
-# -------------------------
+# --- Public Routes ---
 @app.route("/")
 def index():
     return render_template("Landing.html")
@@ -58,70 +50,65 @@ def signup():
         return redirect(url_for("dashboard"))
     return render_template("signup.html")
 
-# -------------------------
-# ✅ The ONLY callback route you need
-# -------------------------
-@app.route("/login_success")
-def login_success():
+@app.route("/auth/google/callback")
+def google_auth_callback():
     if not google.authorized:
         return redirect(url_for("login"))
 
     try:
         resp = google.get("/oauth2/v2/userinfo")
-        if not resp.ok:
-            return "Failed to fetch Google user info", 500
-
-        user = resp.json()
-        session["user"] = {
-            "name": user.get("name"),
-            "email": user.get("email"),
-            "picture": user.get("picture"),
-        }
-        return redirect(url_for("dashboard"))
-
+        if resp.ok:
+            user_info = resp.json()
+            session["user"] = {
+                "name": user_info.get("name", "User"),
+                "email": user_info.get("email", "Unknown"),
+                "picture": user_info.get("picture", "")
+            }
+            return redirect(url_for("dashboard"))
+        else:
+            return "Failed to fetch user info from Google.", 500
     except Exception as e:
         return f"An error occurred: {e}", 500
 
-# -------------------------
-# Logout
-# -------------------------
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("index"))
 
-# -------------------------
-# Protected Routes
-# -------------------------
+# --- Protected Routes ---
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", user=session["user"])
+    user = session.get("user")
+    return render_template("dashboard.html", user=user)
 
 @app.route("/upload")
 @login_required
 def upload():
-    return render_template("upload.html", user=session["user"])
+    user = session.get("user")
+    return render_template("upload.html", user=user)
 
 @app.route("/file_upload", methods=["POST"])
 @login_required
 def file_upload():
-    if "file" not in request.files:
-        return jsonify({"success": False, "message": "No file uploaded"}), 400
 
-    file = request.files["file"]
-    upload_path = os.path.join(os.getcwd(), "uploads")
+    if 'file' not in request.files:
+        return jsonify({"success": False, "message": "No file part in the request."}), 400
+
+    file = request.files['file']
+    upload_path = os.path.join(os.getcwd(), 'uploads')
 
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
 
-    success, message = save_report_file(file, upload_path)
-    if success:
-        return jsonify({"success": True, "filename": message})
-    return jsonify({"success": False, "message": message}), 400
+    # UPDATED to use the new function
+    success, message_or_filename = save_report_file(file, upload_path)
 
-# -------------------------
-# Run Server
-# -------------------------
+    if success:
+        return jsonify({"success": True, "filename": message_or_filename}), 200
+    else:
+        return jsonify({"success": False, "message": message_or_filename}), 400
+
+# --- Run App ---
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5500)
+    app.run(debug=True)
