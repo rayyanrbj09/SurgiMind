@@ -1088,3 +1088,165 @@ input[type="button"] {
   transform: rotate(90deg);
   color: var(--primary-red);
 }
+
+/* ============================================================= */
+/* GLOBAL RESPONSIVE FIX – SURGIMIND FULL RESPONSIVENESS PATCH   */
+/* ============================================================= */
+
+/* ====== SMALL MOBILE (0–480px) ====== */
+@media (max-width: 480px) {
+
+  body {
+    padding: 0 !important;
+  }
+
+  h1, h2 { font-size: 1.4rem !important; }
+  h3 { font-size: 1.1rem !important; }
+
+  .full-screen-hero {
+    height: auto !important;
+    padding: 4rem 1rem !important;
+    text-align: center;
+  }
+
+  .feature-card {
+    width: 100% !important;
+  }
+
+  .auth-container {
+    padding: 0 !important;
+    gap: 0.5rem !important;
+  }
+
+  .glass-auth-card,
+  .auth-info-panel {
+    width: 92% !important;
+    margin: 0 auto !important;
+  }
+
+  #ai-chat-window {
+    width: 90% !important;
+    height: 60vh !important;
+    right: 5% !important;
+    bottom: 85px !important;
+  }
+
+  #ai-chatbot-btn {
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .video-wrapper {
+    height: 200px !important;
+  }
+}
+
+/* ====== MEDIUM MOBILE (481–767px) ====== */
+@media (max-width: 767px) and (min-width: 481px) {
+
+  .auth-container {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .glass-auth-card,
+  .auth-info-panel {
+    width: 85% !important;
+  }
+
+  .full-screen-hero {
+    padding-top: 6rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  #ai-chat-window {
+    width: 85% !important;
+    right: 7% !important;
+  }
+}
+
+/* ====== TABLETS (768–1024px) ====== */
+@media (max-width: 1024px) and (min-width: 768px) {
+
+  h1 { font-size: 2rem !important; }
+
+  .auth-container {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .auth-info-panel,
+  .glass-auth-card {
+    width: 70% !important;
+  }
+
+  .feature-card {
+    width: 48% !important;
+  }
+
+  #ai-chat-window {
+    width: 350px !important;
+    height: 450px !important;
+  }
+}
+
+/* ====== SMALL LAPTOPS (1025–1440px) ====== */
+@media (max-width: 1440px) and (min-width: 1025px) {
+
+  .auth-container {
+    gap: 2rem !important;
+  }
+
+  .glass-auth-card {
+    width: 420px !important;
+  }
+
+  .auth-info-panel {
+    width: 380px !important;
+  }
+
+  .feature-card {
+    width: 31% !important;
+  }
+}
+
+/* ====== LARGE DISPLAYS (1441px–3000px) ====== */
+@media (min-width: 1441px) {
+
+  .full-screen-hero {
+    padding: 10rem 4rem !important;
+  }
+
+  .feature-card {
+    transform: scale(1.05);
+  }
+
+  .glass-auth-card,
+  .auth-info-panel {
+    transform: scale(1.1);
+    transform-origin: top center;
+  }
+}
+
+/* ====== ULTRA-WIDE (3000px+) ====== */
+@media (min-width: 3000px) {
+
+  body {
+    font-size: 1.6rem;
+  }
+
+  h1 { font-size: 3.5rem !important; }
+  h2 { font-size: 2.5rem !important; }
+
+  .glass-auth-card,
+  .auth-info-panel {
+    transform: scale(1.4);
+  }
+
+  #ai-chat-window {
+    transform: scale(1.4);
+  }
+}
+
