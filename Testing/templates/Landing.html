@@ -12,8 +12,8 @@
     <script>
         // Placeholder function to navigate to dedicated HTML pages
         function navigate(page) {
-            if (page === 'login') window.location.href = 'login.html';
-            else if (page === 'signup') window.location.href = 'signup.html';
+            if (page === 'login') window.location.href = '/login';
+            else if (page === 'signup') window.location.href = '/signup';
             else console.log(`Navigating to ${page}`);
         }
     </script>
@@ -56,8 +56,8 @@
         
         <!-- CRITICAL FIX: Added landing-btn-group wrapper for width control on mobile -->
         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 landing-btn-group">
-          <a href="login.html" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover w-full sm:w-auto">Login</a>
-          <a href="signup.html" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover w-full sm:w-auto">Sign Up</a>
+          <a href="/login" class="px-8 py-3 rounded-lg font-semibold text-lg text-white bg-primary-blue button-3d-hover w-full sm:w-auto">Login</a>
+          <a href="/signup" class="px-8 py-3 rounded-lg text-primary-blue bg-white border-2 border-primary-blue font-semibold text-lg button-3d-hover w-full sm:w-auto">Sign Up</a>
         </div>
       </div>
     </section>
