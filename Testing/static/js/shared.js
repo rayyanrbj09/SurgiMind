@@ -76,7 +76,7 @@ function handleSocialLogin(provider) {
     
     setTimeout(() => {
         showToast(`Login via ${provider} successful! Redirecting to Dashboard...`, 'success');
-        window.location.href = 'dashboard.html';
+        window.location.href = '/dashboard';
     }, 1500);
 }
 
@@ -234,10 +234,10 @@ function loadChatbotComponent() {
   if (document.getElementById('ai-chatbot-btn') || document.getElementById('ai-chat-window')) return;
 
   const path = window.location.pathname.toLowerCase();
-  const isAuthPage = path.includes('login.html') || path.includes('signup.html');
+  const isAuthPage = path == '\login' || path == '\signup';
   if (isAuthPage) return;
 
-  fetch('chatbot_component.html')
+  fetch('/chatbot_component')
     .then(response => {
       if (!response.ok) throw new Error(`Chatbot load failed (${response.status})`);
       return response.text();
