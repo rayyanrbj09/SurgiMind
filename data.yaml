@@ -1,13 +1,15 @@
-path: dataset
+path: /home/sagemaker-user/yolo_dataset
+
 train: images/train
 val: images/val
 
-nc: 7
+nc: 7   # <-- change if your number of tools is different
+
 names:
-  - grasper
-  - bipolar
-  - hook
-  - scissors
-  - clipper
-  - irrigator
-  - specimen-bag
+  0: Tool_0
+  1: Tool_1
+  2: Tool_2
+  3: Tool_3
+  4: Tool_4
+  5: Tool_5
+  6: Tool_6
