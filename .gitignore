@@ -8,6 +8,34 @@ __pycache__/
 # C extensions
 *.so
 
+runs/
+yolo-exp/
+__pycache__/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env / secrets
+.env
+
+# Training outputs
+runs/
+yolo-exp/
+model/
+models/
+output/
+checkpoints/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+
 # Distribution / packaging
 .Python
 build/
