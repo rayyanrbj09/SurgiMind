@@ -13,6 +13,17 @@ yolo-exp/
 __pycache__/
 .env
 
+# Model weights
+*.pt
+*.pth
+*.onnx
+
+# Training outputs
+yolo-exp/
+runs/
+artifacts/
+checkpoints/
+
 # Python
 __pycache__/
 *.pyc
