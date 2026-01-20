@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from functools import wraps
 # UPDATED import to match the new function name
 from backend.core.file_uploads import save_report_file
+from main import generate_summary
 
 # --- App Setup ---
 load_dotenv()
@@ -106,6 +107,31 @@ def file_upload():
         return jsonify({"success": True, "filename": message_or_filename}), 200
     else:
         return jsonify({"success": False, "message": message_or_filename}), 400
+    
+    
+
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    
+@app.route("/summarize", methods=["POST"])
+def summarize_pdf():
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), 400
+
+    pdf_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(pdf_path)
+
+    try:
+        summary = generate_summary(pdf_path)
+        return jsonify({"summary": summary})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
     
 

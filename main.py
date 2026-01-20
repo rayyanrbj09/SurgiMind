@@ -1,11 +1,14 @@
 from reports_service import ReportExtractor
 from summary import Summarizer
 
-pdf_path = r"uploads/Untitled_document_8.pdf"
+def generate_summary(pdf_path: str) -> str:
+    """
+    Extracts content from a PDF and returns its summary
+    """
+    report = ReportExtractor(pdf_path)
+    extracted_content = report.extract_all()
 
-report = ReportExtractor(pdf_path)
-extracted_content = report.extract_all()
+    summarizer = Summarizer()
+    final_summary = summarizer.summarize(extracted_content)
 
-summarizer = Summarizer()
-final_summary = summarizer.summarize(extracted_content)
-print("Final Summary:\n", final_summary)
+    return final_summary
