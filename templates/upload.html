@@ -22,7 +22,7 @@
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="{{ url_for('dashboard') }}" class="nav-link-glow">Dashboard</a>
                     <a href="{{ url_for('upload') }}" class="nav-link-glow active">Upload Report</a>
-                    <a href="#" class="nav-link-glow">Tool Detection</a>
+                    <a href="{{ url_for('tool_detection_page') }}" class="nav-link-glow">Tool Detection</a>
                     <a href="#" class="nav-link-glow">History</a>
                     <a href="#" class="nav-link-glow">Help</a>
                     <a href="{{ url_for('logout') }}" class="nav-link-Glow text-red-400">Logout</a>
@@ -70,51 +70,27 @@
 
             <div class="md:w-2/5 space-y-6 fade-in-up animation-delay-300">
                 <div class="glass-app-card p-6 rounded-xl border-t-4 border-primary-red">
-                    <h3 class="text-xl font-bold text-white mb-4">Recommended Tool Checklist</h3>
-                    <p class="text-sm text-gray-400 mb-4">Based on predicted procedure: Heart Surgery.</p>
-                    
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🦴</span>
-                                <span class="font-medium">Rib Spreader (Finochietto)</span>
-                                <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
-                            </div>
-                        </li>
-                        <li class="flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">✂️</span>
-                                <span class="font-medium">Coronary Scissor (Potts-Smith)</span>
-                                <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
-                            </div>
-                        </li>
-                        <li class="flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">📎</span>
-                                <span class="font-medium">Vascular Clamps (Bulldog)</span>
-                                <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
-                            </div>
-                        </li>
-                        <li class="flex items-center justify-between text-white">
-                            <!-- Typo 'classs' fixed to 'class' -->
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🧵</span>
-                                <span class="font-medium">Sutures (6-0 Prolene)</span>
-                                <span class="text-xs status-pill-red px-2 py-0.5 rounded-full">Required</span>
-                            </div>
-                        </li>
-                        <li class="flex items-center justify-between text-white">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🥢</span>
-                                <span class="font-medium">DeBakey Forceps</span>
-                                <span class="text-xs bg-gray-500 text-white px-2 py-0.5 rounded-full">Optional</span>
-                            </div>
-                        </li>
-                    </ul>
+                    <h3 class="text-xl font-bold text-white mb-4">
+        Report Summary
+    </h3>
 
-                    <button onclick="showToast('Checklist downloaded.', 'success')" class="mt-6 w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-4 py-2 text-base font-semibold hover:bg-gray-600 transition">
-                        Download Checklist
-                    </button>
+    <p id="summary-status" class="text-sm text-gray-400 mb-4">
+        Upload a PDF and click “Generate Summary”.
+    </p>
+
+    <div
+        id="summary-content"
+        class="text-sm text-gray-200 whitespace-pre-line leading-relaxed mb-4"
+    >
+        <!-- Summary will appear here -->
+    </div>
+
+    <button
+        onclick="generateSummary()"
+        class="w-full bg-primary-red text-white rounded-lg px-4 py-2 text-base font-semibold hover:opacity-90 transition"
+    >
+        Generate Summary
+    </button>
                 </div>
             </div>
         </div>
@@ -133,3 +109,49 @@
     </footer>
 </body>
 </html>
+
+<script>
+async function generateSummary() {
+    const fileInput = document.getElementById("report-upload");
+
+    if (!fileInput.files.length) {
+        showToast("Please upload a PDF first", "error");
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    document.getElementById("summary-status").innerText =
+        "Analyzing report, please wait...";
+
+    document.getElementById("summary-content").innerText = "";
+
+    try {
+        const res = await fetch("/file_upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.summary) {
+            document.getElementById("summary-status").innerText =
+                "AI-generated summary";
+
+            document.getElementById("summary-content").innerText =
+                data.summary;
+
+            showToast("Summary generated successfully", "success");
+        } else {
+            document.getElementById("summary-status").innerText =
+                "No summary available for this file.";
+        }
+    } catch (err) {
+        document.getElementById("summary-status").innerText =
+            "Error generating summary.";
+    }
+}
+</script>

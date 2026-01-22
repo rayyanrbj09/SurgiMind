@@ -1,141 +1,262 @@
 import os
-from flask import Flask, redirect, url_for, render_template, jsonify, session, request
-from flask_dance.contrib.google import make_google_blueprint, google
-from dotenv import load_dotenv
 from functools import wraps
-# UPDATED import to match the new function name
-from backend.core.file_uploads import save_report_file
-from main import generate_summary
 
-# --- App Setup ---
+from flask import (
+    Flask,
+    render_template,
+    request,
+    jsonify,
+    redirect,
+    url_for,
+    session
+)
+
+from flask_dance.contrib.google import make_google_blueprint, google
+from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+from ultralytics import YOLO
+from flask import Response
+from uploaded_video_stream import stream_uploaded_video
+
+
+# =========================
+# LOCAL IMPORTS
+# =========================
+from main import generate_summary
+from phase_detection_service import run_phase_detection
+
+# =========================
+# APP SETUP
+# =========================
 load_dotenv()
+
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "supersecretkey")
 
-# --- Google OAuth Setup ---
+UPLOAD_FOLDER = "uploads"
+STATIC_FOLDER = "static"
+DETECT_FOLDER = os.path.join(STATIC_FOLDER, "runs", "detect")
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(DETECT_FOLDER, exist_ok=True)
+
+# =========================
+# LOAD MODELS (ONCE)
+# =========================
+tool_model = YOLO("best_tool.pt")
+
+# =========================
+# GOOGLE OAUTH (FIXED SCOPES)
+# =========================
 google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-    redirect_to="google_auth_callback",
-    scope=["openid", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
+    scope=[
+        "openid",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile"
+    ],
 )
-# This is the correct way to add the parameter.
-google_bp.authorization_url_params["prompt"] = "select_account"
 app.register_blueprint(google_bp, url_prefix="/login")
 
-# --- Route Protection Decorator ---
+# =========================
+# AUTH DECORATOR
+# =========================
 def login_required(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         if "user" not in session:
             return redirect(url_for("login"))
         return f(*args, **kwargs)
-    return decorated_function
+    return wrapper
 
-# --- Public Routes ---
+# =========================
+# UI ROUTES
+# =========================
+
 @app.route("/")
 def index():
+    """Landing page (used by templates)"""
     return render_template("Landing.html")
 
-@app.route("/login")
-def login():
-    if "user" in session:
-        return redirect(url_for("dashboard"))
-    return render_template("login.html")
+# Alias (optional but safe)
+@app.route("/landing")
+def landing():
+    return redirect(url_for("index"))
 
 @app.route("/signup")
 def signup():
-    if "user" in session:
-        return redirect(url_for("dashboard"))
     return render_template("signup.html")
 
-@app.route("/auth/google/callback")
-def google_auth_callback():
+@app.route("/login")
+def login():
     if not google.authorized:
-        return redirect(url_for("login"))
+        return redirect(url_for("google.login"))
 
-    try:
-        resp = google.get("/oauth2/v2/userinfo")
-        if resp.ok:
-            user_info = resp.json()
-            session["user"] = {
-                "name": user_info.get("name", "User"),
-                "email": user_info.get("email", "Unknown"),
-                "picture": user_info.get("picture", "")
-            }
-            return redirect(url_for("dashboard"))
-        else:
-            return "Failed to fetch user info from Google.", 500
-    except Exception as e:
-        return f"An error occurred: {e}", 500
+    resp = google.get("/oauth2/v2/userinfo")
+    if not resp.ok:
+        return "Failed to fetch user info", 400
+
+    session["user"] = resp.json()
+    return redirect(url_for("dashboard"))
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("index"))
 
-# --- Protected Routes ---
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    user = session.get("user")
-    return render_template("dashboard.html", user=user)
+    return render_template("dashboard.html", user=session.get("user"))
 
 @app.route("/upload")
 @login_required
-def upload():
-    user = session.get("user")
-    return render_template("upload.html", user=user)
+def upload_page():
+    return render_template("upload.html")
 
+@app.route("/upload-alias")
+@login_required
+def upload():
+    return redirect(url_for("upload_page"))
+
+@app.route("/tool_detection")
+@login_required
+def tool_detection_page():
+    return render_template("tool_detection_page.html")
+
+@app.route("/upload_video", methods=["POST"])
+@login_required
+def upload_video():
+    video = request.files["video"]
+    filename = secure_filename(video.filename)
+
+    video_path = os.path.join(UPLOAD_FOLDER, filename)
+    video.save(video_path)
+
+    return jsonify({
+        "success": True,
+        "video_url": url_for("video_stream", filename=filename)
+    })
+
+
+@app.route("/video_stream/<filename>")
+@login_required
+def video_stream(filename):
+    video_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    return Response(
+        stream_uploaded_video(video_path),
+        mimetype="multipart/x-mixed-replace; boundary=frame"
+    )
+
+
+# =========================
+# API: FILE UPLOAD (GENERIC)
+# =========================
 @app.route("/file_upload", methods=["POST"])
 @login_required
 def file_upload():
+    file = request.files["file"]
+    filename = secure_filename(file.filename)
 
-    if 'file' not in request.files:
-        return jsonify({"success": False, "message": "No file part in the request."}), 400
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    file.save(path)
 
-    file = request.files['file']
-    upload_path = os.path.join(os.getcwd(), 'uploads')
+    summary = None
+    if filename.lower().endswith(".pdf"):
+        summary = generate_summary(path)
 
-    if not os.path.exists(upload_path):
-        os.makedirs(upload_path)
+    return jsonify({
+        "success": True,
+        "filename": filename,
+        "summary": summary
+    })
 
-    # UPDATED to use the new function
-    success, message_or_filename = save_report_file(file, upload_path)
 
-    if success:
-        return jsonify({"success": True, "filename": message_or_filename}), 200
-    else:
-        return jsonify({"success": False, "message": message_or_filename}), 400
-    
-    
-
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    
-@app.route("/summarize", methods=["POST"])
+# =========================
+# API: PDF → SUMMARY
+# =========================
+@app.route("/api/summarize", methods=["POST"])
+@login_required
 def summarize_pdf():
     if "file" not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files["file"]
+    filename = secure_filename(file.filename)
 
-    if file.filename == "":
-        return jsonify({"error": "Empty filename"}), 400
+    if not filename.lower().endswith(".pdf"):
+        return jsonify({"error": "Only PDF files allowed"}), 400
 
-    pdf_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    pdf_path = os.path.join(UPLOAD_FOLDER, filename)
     file.save(pdf_path)
 
-    try:
-        summary = generate_summary(pdf_path)
-        return jsonify({"summary": summary})
+    summary = generate_summary(pdf_path)
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-    
+    return jsonify({
+        "success": True,
+        "summary": summary
+    })
 
-# --- Run App ---
+# =========================
+# API: YOLO TOOL DETECTION
+# =========================
+@app.route("/api/detect_tools", methods=["POST"])
+@login_required
+def detect_tools():
+    if "video" not in request.files:
+        return jsonify({"error": "No video uploaded"}), 400
+
+    video = request.files["video"]
+    filename = secure_filename(video.filename)
+
+    input_path = os.path.join(UPLOAD_FOLDER, filename)
+    video.save(input_path)
+
+    tool_model.predict(
+        source=input_path,
+        save=True,
+        project=os.path.join(STATIC_FOLDER, "runs"),
+        name="detect",
+        exist_ok=True,
+        conf=0.25
+    )
+
+    video_url = url_for(
+        "static",
+        filename=f"runs/detect/{filename}"
+    )
+
+    return jsonify({
+        "success": True,
+        "video_url": video_url
+    })
+
+# =========================
+# API: PHASE DETECTION
+# =========================
+@app.route("/api/detect_phase", methods=["POST"])
+@login_required
+def detect_phase():
+    if "video" not in request.files:
+        return jsonify({"error": "No video uploaded"}), 400
+
+    video = request.files["video"]
+    filename = secure_filename(video.filename)
+
+    video_path = os.path.join(UPLOAD_FOLDER, filename)
+    video.save(video_path)
+
+    result = run_phase_detection(video_path)
+
+    return jsonify({
+        "success": True,
+        "result": result
+    })
+
+# =========================
+# RUN SERVER
+# =========================
 if __name__ == "__main__":
     app.run(debug=True)
-

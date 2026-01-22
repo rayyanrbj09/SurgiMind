@@ -20,7 +20,7 @@
                 <nav class="hidden md:flex space-x-6 text-base font-medium">
                     <a href="{{ url_for('dashboard') }}" class="nav-link-glow active">Dashboard</a>
                     <a href="{{ url_for('upload') }}" class="nav-link-glow">Upload Report</a>
-                    <a href="#" class="nav-link-glow">Tool Detection</a>
+                    <a href="{{ url_for('tool_detection_page') }}" class="nav-link-glow">Tool Detection</a>
                     <a href="#" class="nav-link-glow">History</a>
                     <a href="#" class="nav-link-glow">Help</a>
                     <a href="{{ url_for('logout') }}" class="nav-link-glow text-red-400">Logout</a>

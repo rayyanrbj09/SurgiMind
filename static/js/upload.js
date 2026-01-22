@@ -83,3 +83,6 @@ async function startProcessing() {
 // so they can be called from the HTML's 'onload' and 'onchange' attributes.
 window.initUpload = initUpload;
 window.startProcessing = startProcessing;
+
+
+

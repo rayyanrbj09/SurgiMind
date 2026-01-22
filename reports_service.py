@@ -10,6 +10,12 @@ import pytesseract
 from PIL import Image
 from pdf2image import convert_from_path
 import io
+import pytesseract
+
+# pytesseract.pytesseract.tesseract_cmd = (
+#     r"C:/Program Files/Tesseract-OCR/tesseract.exe"
+# )
+
 
 class ReportExtractor:
     def __init__(self, pdf_path):
