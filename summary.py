@@ -9,6 +9,7 @@ It accepts a set of parameters from the user that can be used to generate a prom
 """
 from transformers import pipeline
 
+
 class Summarizer:
     def __init__(self, model_name="facebook/bart-large-cnn"):
         self.summarizer = pipeline("summarization", model=model_name)

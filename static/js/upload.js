@@ -79,6 +79,7 @@ async function startProcessing() {
     fileInput.value = '';
 }
 
+
 // Expose init and startProcessing functions to the global window object
 // so they can be called from the HTML's 'onload' and 'onchange' attributes.
 window.initUpload = initUpload;

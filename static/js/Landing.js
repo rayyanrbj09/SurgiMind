@@ -81,5 +81,6 @@ function initializeLanding() {
     }
 }
 
+
 // ** THE CRITICAL FIX: Expose the initialization function globally **
 window.initializeLanding = initializeLanding;

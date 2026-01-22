@@ -3,5 +3,6 @@ function initDashboard() {
     // This is where you would initialize AOS for dashboard animations if needed
 }
 
+
 // Expose init function
 window.initDashboard = initDashboard;

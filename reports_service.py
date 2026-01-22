@@ -5,6 +5,7 @@ Output formats : Key Findings Summary, Full Report, Presentation Slides or Chart
 Targeted Users : Doctors, Surgeons, Medical Researchers
 """
 
+
 import pdfplumber
 import pytesseract
 from PIL import Image

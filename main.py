@@ -12,4 +12,5 @@ def generate_summary(pdf_path: str) -> str:
     summarizer = Summarizer()
     final_summary = summarizer.summarize(extracted_content)
 
+
     return final_summary

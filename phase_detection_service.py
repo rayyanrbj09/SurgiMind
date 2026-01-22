@@ -8,6 +8,7 @@ from PIL import Image
 from collections import deque
 import os
 
+
 # =========================
 # CONFIG
 # =========================

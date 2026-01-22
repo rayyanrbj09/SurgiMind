@@ -57,6 +57,7 @@ function togglePasswordVisibility(id) {
     input.focus();
 }
 
+
 /**
  * Handles social login button click and redirects to dashboard.html on success.
  */

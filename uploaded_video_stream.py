@@ -4,6 +4,7 @@ import os
 
 model = YOLO("best_tool.pt")
 
+
 def stream_uploaded_video(video_path):
     cap = cv2.VideoCapture(video_path)
 
