@@ -9,7 +9,7 @@ from collections import deque
 
 
 # =========================
-# CONFIG
+# CONFIGURATION    
 # =========================
 MODEL_PATH = r"C:\Users\Rayyan\Downloads\model (1)\best_model.pth"
 VIDEO_PATH = r"C:\Users\Rayyan\Downloads\vid01.mp4"

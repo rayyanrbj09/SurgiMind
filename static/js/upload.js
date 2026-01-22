@@ -82,6 +82,7 @@ async function startProcessing() {
 
 // Expose init and startProcessing functions to the global window object
 // so they can be called from the HTML's 'onload' and 'onchange' attributes.
+//evrything related to upload page can go here
 window.initUpload = initUpload;
 window.startProcessing = startProcessing;
 

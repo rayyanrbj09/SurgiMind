@@ -15,10 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast('Account Created! Redirecting to Dashboard...', 'success');
             
             // CRITICAL FIX: Redirect to dashboard.html on success
+            //Ensure slight delay for user to see the toast
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 500);
         });
     }
-    
+
 });

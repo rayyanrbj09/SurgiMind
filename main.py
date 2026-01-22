@@ -1,6 +1,9 @@
 from reports_service import ReportExtractor
 from summary import Summarizer
 
+# =========================
+# SUMMARY GENERATION FUNCTION
+
 
 def generate_summary(pdf_path: str) -> str:
     """

@@ -27,3 +27,6 @@ Pillow==10.2.0
 # ------------------------
 torch==2.1.2
 transformers==4.36.2
+
+# ------------------------
+# Video Processing (if used in real_timedemo)

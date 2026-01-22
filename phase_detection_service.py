@@ -10,7 +10,7 @@ import os
 
 
 # =========================
-# CONFIG
+# CONFIGiration
 # =========================
 SEQ_LEN = 10
 NUM_CLASSES = 7
