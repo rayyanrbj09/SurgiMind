@@ -19,7 +19,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "supersecretkey")
 github_bp = make_github_blueprint(
     client_id= os.getenv("GITHUB_CLIENT_ID"),
     client_secret= os.getenv("GITHUB_CLIENT_SECRET"),
+<<<<<<< HEAD
     redirect_url= "/auth/github/authorized"
+=======
+>>>>>>> 59a7ee70a8814f45bc149a53817527e332d0787f
 )
 app.register_blueprint(github_bp, url_prefix="/auth")
 

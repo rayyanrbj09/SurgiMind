@@ -8,6 +8,45 @@ __pycache__/
 # C extensions
 *.so
 
+runs/
+yolo-exp/
+__pycache__/
+.env
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+
+# Training outputs
+yolo-exp/
+runs/
+artifacts/
+checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env / secrets
+.env
+
+# Training outputs
+runs/
+yolo-exp/
+model/
+models/
+output/
+checkpoints/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+
 # Distribution / packaging
 .Python
 build/
@@ -182,4 +221,5 @@ cython_debug/
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
-.cursorindexingignore
+.cursorindexingignorenew
+new
