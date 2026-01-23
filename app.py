@@ -138,8 +138,6 @@ def upload_video():
         "success": True,
         "video_url": url_for("video_stream", filename=filename)
     })
-
-
 @app.route("/video_stream/<filename>")
 @login_required
 def video_stream(filename):

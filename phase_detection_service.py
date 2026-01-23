@@ -9,9 +9,6 @@ from collections import deque
 import os
 
 
-# =========================
-# CONFIGiration
-# =========================
 SEQ_LEN = 10
 NUM_CLASSES = 7
 IMG_SIZE = 224

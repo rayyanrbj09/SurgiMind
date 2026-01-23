@@ -58,10 +58,6 @@ function togglePasswordVisibility(id) {
 }
 
 
-/**
- * Handles social login button click and redirects to dashboard.html on success.
- */
-// Simulated social login process
 function handleSocialLogin(provider) {
     showToast(`Simulating connection to ${provider} server...`, 'info');
     

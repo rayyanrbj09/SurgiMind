@@ -2,8 +2,6 @@ import cv2
 from ultralytics import YOLO
 import os
 
-# =========================
-# LOAD MODEL
 
 model = YOLO("best_tool.pt")
 

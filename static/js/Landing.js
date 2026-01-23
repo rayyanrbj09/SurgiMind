@@ -81,6 +81,5 @@ function initializeLanding() {
     }
 }
 
-//EVERYTHING RELATED TO LANDING PAGE CAN GO HERE
-// ** THE CRITICAL FIX: Expose the initialization function globally **
+
 window.initializeLanding = initializeLanding;
