@@ -7,9 +7,7 @@ Targeted Users : Doctors, Surgeons, Medical Researchers
 
 import pdfplumber
 import pytesseract
-from PIL import Image
 from pdf2image import convert_from_path
-import io
 
 class ReportExtractor:
     def __init__(self, pdf_path):
@@ -34,7 +32,15 @@ class ReportExtractor:
                 for page in pdf.pages:
                     page_tables = page.extract_tables()
                     for table in page_tables:
-                        table_str = "\n".join([", ".join(row) for row in table])
+                        # `pdfplumber` may return cells as `None` when a column is blank.
+                        # Coerce every cell to a safe string so one sparse row doesn't
+                        # abort extraction for the entire document.
+                        normalized_rows = []
+                        for row in table:
+                            safe_row = [cell if cell is not None else "" for cell in row]
+                            normalized_rows.append(", ".join(safe_row))
+
+                        table_str = "\n".join(normalized_rows)
                         self.tables.append(table_str)
         except Exception as e:
             print(f"[ERROR] Table extraction failed: {e}")
