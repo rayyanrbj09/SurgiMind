@@ -15,10 +15,9 @@
 
 * **AI / ML**: PyTorch, YOLOv8, LSTM/GRU
 * **Computer Vision**: OpenCV
-* **Backend**: Flask / FastAPI
-* **Frontend**: Streamlit or React.js
-* **Deployment**: Docker, AWS/GCP/Heroku
-
+* **Backend**: Flask
+* **Frontend**: HTML, CSS AND JS
+* **Deployment**: AWS
 ## Project Pipeline
 
 1. **Data Preparation** – Collect and preprocess surgical datasets.
@@ -47,9 +46,7 @@ pip install -r requirements.txt
 # Run backend
 python app.py  
 
-# Run frontend (example: Streamlit)
-streamlit run ui.py  
-```
+
 
 Upload surgical videos/reports to see **tool detection, report summaries, and workflow insights** in action.
 
