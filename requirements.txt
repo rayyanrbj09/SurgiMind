@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 synapseclient
 pdfplumber
 docx
@@ -6,3 +7,37 @@ langchain
 pytesseract
 camelot
 pdf2image
+=======
+# ------------------------
+# Core Flask App
+# ------------------------
+Flask==2.3.3
+flask-dance==7.0.0
+python-dotenv==1.0.1
+requests>=2.31.0
+
+# ------------------------
+# Numerical & Data Stack
+# (LOCKED to avoid NumPy 2.x issues)
+# ------------------------
+numpy==1.26.4
+pandas==2.1.4
+pyarrow==14.0.2
+
+# ------------------------
+# PDF & OCR Processing
+# ------------------------
+pdfplumber==0.10.3
+pdf2image==1.17.0
+pytesseract==0.3.10
+Pillow==10.2.0
+
+# ------------------------
+# ML / NLP (only if used in summary.py)
+# ------------------------
+torch==2.1.2
+transformers==4.36.2
+
+# ------------------------
+# Video Processing (if used in real_timedemo)
+>>>>>>> saad

@@ -1,5 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
+<<<<<<< HEAD
     "sqltools.connections": [
         {
             "mysqlOptions": {
@@ -17,4 +18,9 @@
             "askForPassword": true
         }
     ]
+=======
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": []
+>>>>>>> saad
 }
