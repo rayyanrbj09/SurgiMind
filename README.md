@@ -265,9 +265,9 @@ Phase 1 (Calot Triangle Dissection) is the most confidently predicted class, con
 
 ## Contributors
 
-- Mohd Rayyan bin Mohd Jaweed
-- Syed Saad Ahmed
-- Mohd Sofiyaan
+- [Mohd Rayyan bin Mohd Jaweed](https://github.com/rayyanrbj09)
+- [Syed Saad Ahmed](https://github.com/syedsaad9218))
+- [Mohd Sofiyaan](https://github.com/Sofiyaan12)
 
 ---
 
