@@ -181,14 +181,3 @@ They are a **direct consequence of multi-object detection**.
 > Tools are objects attached to frames.
 > Phases are timelines spanning frames.
 
-Once you think of annotations this way, the data stops looking messy and starts looking structured.
-
----
-
-If you want, next I can:
-
-* convert this graph into a **diagram-ready Mermaid block**
-* or map this directly to **PyTorch dataset logic**
-* or show how this becomes **three clean training tensors**
-
-Just say the word.
