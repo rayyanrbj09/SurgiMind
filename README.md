@@ -1,278 +1,177 @@
-# SurgiMind — Surgical Intelligence Platform
+# SurgiMind — Final Project README
 
-A dual-model AI system for real-time laparoscopic surgery analysis. The platform detects surgical instruments frame-by-frame using YOLOv8, and recognizes the current surgical phase using a CNN-LSTM sequence model — enabling intelligent, context-aware intraoperative assistance.
+This repository contains the implemented Surgical Intelligence platform. After reviewing the code across the active project history, the working implementation is centered on a Flask web app that performs three main AI tasks:
 
----
+- Surgical tool detection on video frames
+- Surgical phase recognition from video sequences
+- Medical report extraction and summarization from uploaded PDFs
 
-## Overview
+The trained detection weights are packaged in the model bundle used for inference. In the live repo, the inference artifacts are available as the root-level weights `best_tool.pt` and `best_phase.pth`; these are the working equivalents of a packaged `model.tar.gz` export.
 
-SurgiMind combines two complementary models to understand what is happening inside the OR at any given moment:
+## What is implemented
 
-- **Instrument Detection** (YOLOv8): Detects and localizes up to 7 surgical tools in each frame with bounding boxes and confidence scores.
-- **Phase Recognition** (CNN-LSTM): Classifies the current phase of a laparoscopic cholecystectomy from a rolling window of 10 frames using temporal context.
+### 1. Surgical tool detection
 
-Both models feed into a shared backend that generates structured reports for surgeons, researchers, and medical educators.
+Implemented with YOLOv8 in `train.py` and loaded in `app.py`:
 
----
+- `tool_model = YOLO("best_tool.pt")`
+- Video upload is supported through the Flask app
+- Detection can be triggered from `/api/detect_tools`
+- Output is saved under the static detection runs folder and exposed as a video result
 
-## Models
+This is the live tool-detection path in the repository and is the primary object-detection capability.
 
-### 1. Instrument Detection — YOLOv8
+### 2. Surgical phase recognition
 
-Detects 7 instrument classes in laparoscopic video frames.
+Implemented with a CNN-LSTM sequence model:
 
-| Class | AP@0.5 |
-|---|---|
-| grasper | 0.432 |
-| bipolar | 0.554 |
-| hook | 0.564 |
-| scissors | 0.168 |
-| clipper | 0.622 |
-| irrigator | 0.044 |
-| specimen_bag | 0.588 |
-| **all classes (mAP@0.5)** | **0.424** |
+- `model.py` defines `CNNLSTM`
+- A ResNet-18 backbone is used to extract features from each frame
+- A temporal LSTM captures sequence context across 10-frame windows
+- The final classifier predicts one of 7 surgical phases
 
-Key observations from the confusion matrix:
-- Irrigator is severely underrepresented in training data (AP: 0.044), causing near-total misclassification as background (0.95).
-- Hook (0.68) and clipper (0.59) are the strongest performers.
-- All classes suffer significant background confusion — a known challenge in instrument detection where tools are frequently partially occluded or off-screen.
+The training pipeline is in:
 
-### 2. Surgical Phase Recognition — CNN-LSTM
+- `train_phase.py`
+- `phase_dataset.py`
+- `model.py`
 
-Classifies one of 7 cholecystectomy phases from a sequence of 10 frames.
+Inference is exposed by:
 
-| Phase ID | Phase Name |
-|---|---|
-| 0 | Preparation |
-| 1 | Calot Triangle Dissection |
-| 2 | Clipping & Cutting |
-| 3 | Gallbladder Dissection |
-| 4 | Gallbladder Packaging |
-| 5 | Cleaning & Coagulation |
-| 6 | Gallbladder Retraction |
+- `phase_detection_service.py`
+- `app.py` route `/api/detect_phase`
 
-**Architecture:** ResNet-18 CNN feature extractor → single-layer LSTM (hidden size 256) → fully connected classifier.
+The project loads the model weights from `best_phase.pth`.
 
-**Training notes:**
-- Validation accuracy oscillates between ~65–80%, peaking around epoch 2–5.
-- Training loss converges near zero rapidly while validation loss diverges — a strong sign of **overfitting**, likely due to limited video diversity in the training split.
-- Phase 1 (Calot Triangle Dissection) dominates the dataset and is predicted most confidently; rare phases (4, 6) are poorly learned.
+### 3. Medical report extraction and summarization
 
----
+The PDF workflow is implemented in:
 
-## Dataset
+- `reports_service.py`
+- `summary.py`
+- `main.py`
 
-The project uses the **CholecTrack20** dataset, downloaded via the Synapse platform.
+It does the following:
 
-**Dataset structure expected per video:**
-```
-VID01/
-├── Frames/          # extracted .jpg frames
-└── annotations.json # frame-level instrument + phase labels
-```
+- Extracts text from PDF pages
+- Extracts tables from PDF pages
+- Runs OCR on rendered document pages
+- Combines the extracted text and OCR into one payload
+- Sends the combined content to a Hugging Face summarization pipeline (`facebook/bart-large-cnn`)
 
-**JSON annotation format:**
-```json
-{
-  "annotations": {
-    "42": [
-      {
-        "instrument": 2,
-        "tool_bbox": [0.51, 0.38, 0.12, 0.09],
-        "phase": 1
-      }
-    ]
-  }
-}
-```
+This is connected to the app through the PDF summarization API in `app.py`.
 
-Bounding boxes are in normalized YOLO format `[x_center, y_center, width, height]`.
+### 4. Web application and uploads
 
----
+The Flask app in `app.py` includes:
 
-## Setup
+- Google/GitHub authentication setup
+- Login and dashboard pages
+- Upload flow for videos and PDFs
+- Real-time video streaming via `uploaded_video_stream.py`
+- API endpoints for:
+  - PDF summary generation
+  - tool detection
+  - surgical phase detection
 
-### Requirements
+This is the main user-facing system implemented in the repository.
 
-```bash
-pip install torch torchvision ultralytics pdfplumber pytesseract pdf2image pillow opencv-python flask werkzeug scikit-learn matplotlib tensorboard
-```
+## Detection models in the model bundle
 
-### Dataset Download
+The model package used by the system contains the trained inference artifacts used by the app:
 
-Configure `.env`:
+- `best_tool.pt` — YOLOv8 surgical tool detector
+- `best_phase.pth` — CNN-LSTM phase classifier
 
-```
-email=your_synapse_email
-auth_token=your_synapse_token
-acesskey=your_access_key
-```
+The project also includes the training configuration for the detection pipeline:
 
-Then run:
+- `data.yaml` — YOLO dataset config
+- `train.py` — YOLO training entry point
+- `train_phase.py` — phase-training entry point
+- `phase_dataset.py` — sequence dataset builder
+- `model.py` — model architecture definition
 
-```bash
-python download_script.py
-```
+The expected model package/export can therefore be thought of as a `model.tar.gz`-style archive containing these detector weights and any supporting metadata.
 
-After downloading, push to S3:
+## Surgical tool classes and phase categories
 
-```bash
-aws s3 cp ./data s3://your-bucket/ --recursive
-```
+### Tool detection
 
-### Convert to YOLO Format
+The object-detection pipeline is trained for 7 tool categories in the dataset config:
 
-```bash
-python coversion.py
-```
+- Tool_0
+- Tool_1
+- Tool_2
+- Tool_3
+- Tool_4
+- Tool_5
+- Tool_6
 
-This reads `Training/` and `Validation/` directories and outputs a YOLO-compatible dataset to `yolo_dataset/`.
+This is configured in `data.yaml`.
 
----
+### Phase detection
 
-## Training
+The phase model classifies 7 laparoscopic surgery phases:
 
-### Instrument Detection (YOLOv8)
+- Preparation
+- Calot Triangle Dissection
+- Clipping & Cutting
+- Gallbladder Dissection
+- Gallbladder Packaging
+- Cleaning & Coagulation
+- Gallbladder Retraction
 
-Designed for AWS SageMaker. Expects `data.yaml` at `/opt/ml/input/data/train/`.
+This is defined in `phase_detection_service.py` and `model.py`.
 
-```bash
-python train.py
-```
+## Project structure
 
-Model checkpoints are saved to `/opt/ml/model/yolo-exp/`.
+- `app.py` — Flask application and API routes
+- `main.py` — summary generation entry point
+- `phase_detection_service.py` — phase inference logic
+- `reports_service.py` — PDF extraction logic
+- `summary.py` — summarization model wrapper
+- `train.py` — YOLO tool model training
+- `train_phase.py` — phase model training
+- `phase_dataset.py` — frame-sequence dataset loader
+- `model.py` — CNN-LSTM network architecture
+- `uploaded_video_stream.py` — video streaming support
+- `best_tool.pt` — trained tool detector
+- `best_phase.pth` — trained phase detector
+- `assets/` — sample plots and evaluation visuals
+- `static/` and `templates/` — web frontend
 
-### Phase Recognition (CNN-LSTM)
+## How to run
 
-```bash
-python train_phase.py \
-  --epochs 30 \
-  --batch-size 4 \
-  --seq-len 10 \
-  --lr 1e-4 \
-  --num-phases 7
-```
-
-Set `SM_CHANNEL_TRAIN`, `SM_CHANNEL_VAL`, and `SM_MODEL_DIR` environment variables for SageMaker, or let them default to `./data/train`, `./data/val`, and `./models`.
-
-TensorBoard logs are written to `{model_dir}/runs`. Best model saved as `best_model.pth`.
-
----
-
-## Inference
-
-### Real-Time Local Demo
+Install dependencies:
 
 ```bash
-python real_timedemo.py
+pip install -r requirements.txt
 ```
 
-Update `MODEL_PATH` and `VIDEO_PATH` in the script before running. Displays phase label and confidence overlaid on video. Press `Esc` to exit.
+Start the application:
 
-### Phase Detection Service (Flask)
-
-```python
-from phase_detection_service import run_phase_detection
-
-result = run_phase_detection("path/to/video.mp4")
-# Returns:
-# {
-#   "total_frames": 4200,
-#   "timeline": [
-#     {"frame": 10, "phase": "CalotTriangleDissection", "confidence": 0.812},
-#     ...
-#   ]
-# }
+```bash
+python app.py
 ```
 
-Place `best_phase.pth` in the project root before starting the server.
+Then access the Flask UI and upload:
 
----
+- a surgical video for tool or phase detection
+- a PDF for report extraction and summary generation
 
-## Report Generation
+## Repository status
 
-`reports_service.py` extracts content from medical PDF reports for downstream AI summarization.
+Across the checked branches, the live implementation is present in the main working branch. The branch variants reviewed during the repo audit primarily contained README placeholders and did not add working inference code beyond the core project already present in the active branch.
 
-```python
-from reports_service import ReportExtractor
+## Summary
 
-extractor = ReportExtractor("patient_report.pdf")
-combined_text = extractor.extract_all()
-# Returns concatenated text, OCR output, and table data
-```
+The implemented system is a practical surgical AI platform that combines:
 
-Accepted upload formats (via Flask): `.pdf`, `.dcm`, `.jpg`, `.jpeg`, `.png`
+- real-time surgical tool detection using YOLOv8
+- surgical phase classification using a CNN-LSTM model
+- PDF-based medical report extraction and summarization
+- a Flask-based interface for upload, analysis, and dashboard use
 
----
+This is the current state of the codebase and the final supported implementation in this repository.
 
-## Known Issues & Improvements
 
-| Issue | Root Cause | Suggested Fix |
-|---|---|---|
-| Irrigator AP near zero | Extreme class imbalance | Oversample irrigator frames; use focal loss |
-| Phase model overfitting | Few training videos | Add dropout, stronger augmentation, more videos |
-| Validation accuracy unstable | Small val set, class imbalance | Stratified splits; weighted loss already applied |
-| Background confusion in YOLO | Partial occlusion, small tools | Mosaic augmentation; anchor tuning |
-| `None` cells crash table extraction | Sparse PDF tables | Fixed in updated `reports_service.py` with coercion |
-
----
-
-## Results
-
-### Instrument Detection — YOLOv8
-
-#### Precision-Recall Curve
-
-The PR curve shows per-class detection performance at IoU threshold 0.5. Clipper (0.622) and specimen_bag (0.588) lead the per-class APs, while irrigator (0.044) is nearly undetectable due to severe class imbalance. Overall mAP@0.5 is **0.424**.
-
-![Precision-Recall Curve](assets/pr_curve.png)
-
-#### Confusion Matrix (Normalized)
-
-The normalized confusion matrix reveals that most classes suffer significant false-negative leakage into the background class. Irrigator is predicted as background 95% of the time. Hook achieves the highest true-positive rate at 0.68.
-
-![Confusion Matrix — YOLOv8](assets/confusion_matrix_yolo.png)
-
-#### Sample Inference
-
-Real-time inference on a laparoscopic cholecystectomy frame from the CholecTrack20 public research dataset. The model simultaneously detects a grasper (confidence: 0.84) and a hook (confidence: 0.62) with accurate bounding box localization.
-
-![Sample Inference — YOLO Detection](assets/inference_sample.png)
-
----
-
-### Surgical Phase Recognition — CNN-LSTM
-
-#### Training & Validation Loss
-
-Training loss converges to near zero within the first 5 epochs. Validation loss, however, diverges and oscillates between 1.0–2.0 — a clear sign of overfitting driven by limited training video diversity. The best checkpoint is saved at the epoch with lowest validation loss.
-
-![Loss Curve](assets/loss_curve.png)
-
-#### Validation Accuracy
-
-Validation accuracy peaks at ~78% in early epochs and stabilizes in the 70–78% range for most of training, with occasional drops (e.g., epoch 6) likely corresponding to the model momentarily over-specializing on dominant phases before the learning rate scheduler corrects course.
-
-![Validation Accuracy](assets/accuracy_curve.png)
-
-#### Confusion Matrix (Phase Recognition)
-
-Phase 1 (Calot Triangle Dissection) is the most confidently predicted class, consistent with its dominance in the dataset. Rare phases such as Gallbladder Packaging (4) and Gallbladder Retraction (6) show significant misclassification into phase 1 and phase 3, reflecting the class imbalance in the training split.
-
-![Confusion Matrix — Phase Recognition](assets/confusion_matrix_phase.png)
-
----
-
-## Contributors
-
-- [Mohd Rayyan bin Mohd Jaweed](https://github.com/rayyanrbj09)
-- [Syed Saad Ahmed](https://github.com/syedsaad9218))
-- [Mohd Sofiyaan](https://github.com/Sofiyaan12)
-
----
-
-## Acknowledgements
-
-- Dataset: [CholecTrack20](https://github.com/CAMMA-public/cholectrack20) by Chinedu I. Nwoye et al., IHU Strasbourg
-- Detection backbone: [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics)
-- Phase recognition backbone: ResNet-18 via [torchvision](https://pytorch.org/vision/)
